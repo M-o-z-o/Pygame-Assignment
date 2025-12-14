@@ -48,11 +48,20 @@ import pygame
 pygame.init()
 
 # *********SETUP**********
+deadPoolSpriteSheet = pygame.image.load('idle3.png')
 
-windowWidth = 500
-windowHeight = 500
+windowWidth = 1200
+windowHeight = 800
 window = pygame.display.set_mode((windowWidth, windowHeight))
 clock = pygame.time.Clock()  #will allow us to set framerate
+deadPoolPatchSize = [0,0,84.5,114]
+deadPoolPatchNum = 0
+numOfDeadPoolPatches = 12
+
+deadPoolFrameRate = 6
+frameCount = 0
+
+deadPoolPos = [700,500]
 
 # *********GAME LOOP**********
 while True:
@@ -64,13 +73,22 @@ while True:
     #PUT YOUR MOUSE/KEYBOARD EVENTS HERE
    
     # *********GAME LOGIC**********
-   
+    if (frameCount % deadPoolFrameRate == 0):
+        if (deadPoolPatchNum < numOfDeadPoolPatches - 1):
+            deadPoolPatchNum += 1
+            deadPoolPatchSize[0] += deadPoolPatchSize[2]
+        else:
+            deadPoolPatchNum = 0
+            deadPoolPatchSize[0] = 0
+    frameCount += 1
+
     #PUT YOUR GAME LOGIN HERE FOR EACH GAMESTATE
    
     # *********DRAW THE FRAME**********
+    window.fill((255,255,255))  #clear screen by filling it with black
+    window.blit(deadPoolSpriteSheet, deadPoolPos, deadPoolPatchSize)
 
     #PUT YOUR DRAWING, IMAGE PLACEMENT, BLIT ETC.. COMMANDS HERE FOR EACH GAMESTATE'''
-
     # *********SHOW THE FRAME TO THE USER**********
     pygame.display.flip()
     clock.tick(60) #Force frame rate to 60fps or lower
