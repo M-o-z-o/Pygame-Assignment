@@ -44,54 +44,42 @@ Features Added Beyond Level 3 Requirements:
 -----------------------------------------------------------------------------
 '''
 
+#Links needed for sprites
+#https://pokemondb.net/move/generation/5
+#https://pokemondb.net/sprites
+
+# Example file showing a basic pygame "game loop"
 import pygame
+import gif_pygame
+
+userCharizardIdle = gif_pygame.load("charizard.gif")
+opponentBlastoiseIdle = gif_pygame.load("blastoise.gif")
+
+battleBg = pygame.image.load("battleBG.jpg")
+
+# pygame setup
 pygame.init()
+screen = pygame.display.set_mode((1280, 720))
+clock = pygame.time.Clock()
+running = True
 
-# *********SETUP**********
-deadPoolSpriteSheet = pygame.image.load('idle3.png')
+while running:
+    # poll for events
+    # pygame.QUIT event means the user clicked X to close your window
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
 
-windowWidth = 1200
-windowHeight = 800
-window = pygame.display.set_mode((windowWidth, windowHeight))
-clock = pygame.time.Clock()  #will allow us to set framerate
-deadPoolPatchSize = [0,0,84.5,114]
-deadPoolPatchNum = 0
-numOfDeadPoolPatches = 12
+    # fill the screen with a color to wipe away anything from last frame
+    screen.blit(battleBg,(400,400))
 
-deadPoolFrameRate = 6
-frameCount = 0
+    # RENDER YOUR GAME HERE
+    userCharizardIdle.render(screen,(400,400))
+    opponentBlastoiseIdle.render(screen,(800,400))
 
-deadPoolPos = [700,500]
-
-# *********GAME LOOP**********
-while True:
-    # *********EVENTS**********
-    ev = pygame.event.poll()    # Look for any event
-    if ev.type == pygame.QUIT:  # windowow close button clicked?
-        break                   #   ... leave game loop
-   
-    #PUT YOUR MOUSE/KEYBOARD EVENTS HERE
-   
-    # *********GAME LOGIC**********
-    if (frameCount % deadPoolFrameRate == 0):
-        if (deadPoolPatchNum < numOfDeadPoolPatches - 1):
-            deadPoolPatchNum += 1
-            deadPoolPatchSize[0] += deadPoolPatchSize[2]
-        else:
-            deadPoolPatchNum = 0
-            deadPoolPatchSize[0] = 0
-    frameCount += 1
-
-    #PUT YOUR GAME LOGIN HERE FOR EACH GAMESTATE
-   
-    # *********DRAW THE FRAME**********
-    window.fill((255,255,255))  #clear screen by filling it with black
-    window.blit(deadPoolSpriteSheet, deadPoolPos, deadPoolPatchSize)
-
-    #PUT YOUR DRAWING, IMAGE PLACEMENT, BLIT ETC.. COMMANDS HERE FOR EACH GAMESTATE'''
-    # *********SHOW THE FRAME TO THE USER**********
+    # flip() the display to put your work on screen
     pygame.display.flip()
-    clock.tick(60) #Force frame rate to 60fps or lower
 
+    clock.tick(60)  # limits FPS to 60
 
 pygame.quit()
