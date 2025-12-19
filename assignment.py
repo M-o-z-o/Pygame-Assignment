@@ -55,11 +55,11 @@ import gif_pygame
 userCharizardIdle = gif_pygame.load("charizard.gif")
 opponentBlastoiseIdle = gif_pygame.load("blastoise.gif")
 
-battleBg = pygame.image.load("battleBG.jpg")
+battleBg = pygame.image.load("battleBG2.jpg")
 
 # pygame setup
 pygame.init()
-screen = pygame.display.set_mode((1280, 720))
+screen = pygame.display.set_mode((400, 600))
 clock = pygame.time.Clock()
 running = True
 
@@ -71,11 +71,11 @@ while running:
             running = False
 
     # fill the screen with a color to wipe away anything from last frame
-    screen.blit(battleBg,(400,400))
+    screen.blit(battleBg,(0,0))
 
     # RENDER YOUR GAME HERE
-    userCharizardIdle.render(screen,(400,400))
-    opponentBlastoiseIdle.render(screen,(800,400))
+    userCharizardIdle.render(screen,(80,100))
+    opponentBlastoiseIdle.render(screen,(290,60))
 
     # flip() the display to put your work on screen
     pygame.display.flip()
