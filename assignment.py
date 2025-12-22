@@ -55,11 +55,21 @@ import gif_pygame
 userCharizardIdle = gif_pygame.load("charizard.gif")
 opponentBlastoiseIdle = gif_pygame.load("blastoise.gif")
 
-battleBg = pygame.image.load("battleBG2.jpg")
+battleBg = pygame.image.load("battleBG.png")
+dsBG = pygame.image.load("DS BG.png")
+bg = pygame.image.load("r1UVBhX.png")
+
+RED = (239, 57, 56)
+ORANGE = (232, 155, 39)
+BLUE = (42, 148, 206)
+GREEN = (90, 181, 41)
+BEIGE = (239, 255, 216)
 
 # pygame setup
 pygame.init()
-screen = pygame.display.set_mode((400, 600))
+font = pygame.font.Font("PokemonGb-RAeo.ttf", 20)
+
+screen = pygame.display.set_mode((700, 727))
 clock = pygame.time.Clock()
 running = True
 
@@ -69,13 +79,40 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        mouseX, mouseY = pygame.mouse.get_pos()
 
     # fill the screen with a color to wipe away anything from last frame
-    screen.blit(battleBg,(0,0))
+    print(mouseX, mouseY)
+    screen.blit(dsBG,(0,0))    
+    screen.blit(battleBg,(187,53))
+    #screen.blit(bg,(100,-250))
+
+    pygame.draw.rect(screen, BEIGE, (186, 423, 328, 247))
+
+    #pygame.draw.rect(screen, 'white', (250, 440, 200, 120), border_radius = 10)
+    pygame.draw.rect(screen, 'black', (255, 445, 190, 115), border_radius = 10)
+    pygame.draw.rect(screen, RED, (255, 445, 190, 110), border_radius = 10)
+    textSurface = font.render("FIGHT", True, 'black')
+    screen.blit(textSurface, (300, 490))
+
+
+    pygame.draw.rect(screen, ORANGE, (190, 570, 105, 90), border_radius = 10)
+    textSurface = font.render("BAG", True, 'black')
+    screen.blit(textSurface, (220, 610))
+
+    pygame.draw.rect(screen, BLUE, (315, 570, 105, 90), border_radius = 10)
+    textSurface = font.render("RUN", True, 'black')
+    screen.blit(textSurface, (340, 610))
+
+    pygame.draw.rect(screen, GREEN, (440, 570, 105, 90), border_radius = 10)
+    textSurface = font.render("POKéMON", True, 'black')
+    screen.blit(textSurface, (460, 610))
+
+
 
     # RENDER YOUR GAME HERE
-    userCharizardIdle.render(screen,(80,100))
-    opponentBlastoiseIdle.render(screen,(290,60))
+    userCharizardIdle.render(screen,(210,180))
+    opponentBlastoiseIdle.render(screen,(390,110))
 
     # flip() the display to put your work on screen
     pygame.display.flip()
