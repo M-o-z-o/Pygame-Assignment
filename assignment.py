@@ -50,26 +50,31 @@ Features Added Beyond Level 3 Requirements:
 
 # Example file showing a basic pygame "game loop"
 import pygame
-import gif_pygame
 
-userCharizardIdle = gif_pygame.load("charizard.gif")
-opponentBlastoiseIdle = gif_pygame.load("blastoise.gif")
+userCharizardIdle = pygame.image.load("charizard.png")
+opponentBlastoiseIdle = pygame.image.load("blastoise.png")
 
-battleBg = pygame.image.load("battleBG.png")
-dsBG = pygame.image.load("DS BG.png")
-bg = pygame.image.load("r1UVBhX.png")
+battleBg = pygame.image.load("battlebggold (1).png")
+aiground = pygame.image.load("aiground (1).png")
+fightUI = pygame.image.load("battleUI.png")
+fightUI2 = pygame.image.load("pixil-frame-0 (1).png")
 
 RED = (239, 57, 56)
 ORANGE = (232, 155, 39)
 BLUE = (42, 148, 206)
 GREEN = (90, 181, 41)
 BEIGE = (239, 255, 216)
+GRAY = (145, 145, 145)
+LIGHTGRAY = (184, 184, 184)
+WHITE = (248, 248, 248)
+
+gamestate = "battleMenu"
 
 # pygame setup
 pygame.init()
-font = pygame.font.Font("PokemonGb-RAeo.ttf", 20)
+font = pygame.font.Font("PokemonGb-RAeo.ttf", 50)
 
-screen = pygame.display.set_mode((700, 727))
+screen = pygame.display.set_mode((1200, 800))
 clock = pygame.time.Clock()
 running = True
 
@@ -80,39 +85,78 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         mouseX, mouseY = pygame.mouse.get_pos()
-
-    # fill the screen with a color to wipe away anything from last frame
     print(mouseX, mouseY)
-    screen.blit(dsBG,(0,0))    
-    screen.blit(battleBg,(187,53))
-    #screen.blit(bg,(100,-250))
 
-    pygame.draw.rect(screen, BEIGE, (186, 423, 328, 247))
+    # checking if left mouse button is clicked
+    if event.type == pygame.MOUSEBUTTONDOWN:
+        if gamestate == "battleMenu":
+            if 15 <= mouseX <= 450 and 592 <= mouseY <= 692:
+                gamestate = "fightMenu"
+            if 460 <= mouseX <= 890 and 592 <= mouseY <= 692:
+                gamestate = "homeMenu"
+            if 15 <= mouseX <= 450 and 702 <= mouseY <= 787:
+                gamestate = "pokemonMenu"
+            if 460 <= mouseX <= 890 and 702 <= mouseY <= 787:
+                gamestate = "runMenu"
 
-    #pygame.draw.rect(screen, 'white', (250, 440, 200, 120), border_radius = 10)
-    pygame.draw.rect(screen, 'black', (255, 445, 190, 115), border_radius = 10)
-    pygame.draw.rect(screen, RED, (255, 445, 190, 110), border_radius = 10)
-    textSurface = font.render("FIGHT", True, 'black')
-    screen.blit(textSurface, (300, 490))
+        if gamestate == "fightMenu":
+            if 460 <= mouseX <= 890 and 592 <= mouseY <= 692:
+                gamestate = "battleMenu"
+
+    if gamestate == "homePage":  
+        screen.blit(battleBg,(0,0))
+        screen.blit(aiground,(690,280))
+        screen.blit(fightUI,(0,575))
+
+    if gamestate == "battleMenu":
+        screen.blit(battleBg,(0,0))
+        screen.blit(aiground,(690,280))
+        screen.blit(userCharizardIdle,(100,350))
+        screen.blit(opponentBlastoiseIdle,(710,55))
+        screen.blit(fightUI,(0,575))
+
+        # Buttons
+        fightText = font.render("FIGHT", True, WHITE)   
+        screen.blit(fightText, (120, 622))
+        bagText = font.render("BACK", True, WHITE)   
+        screen.blit(bagText, (585, 622))
+        pokemonText = font.render("POKéMON", True, WHITE)   
+        screen.blit(pokemonText, (60, 722))
+        runText = font.render("RUN", True, WHITE)   
+        screen.blit(runText, (605, 722))
+
+        # Mouse Hover Effect
+        if 15 <= mouseX <= 450 and 592 <= mouseY <= 692:
+            #screen.blit(fightUI2,(0,513))
+            fightText = font.render("FIGHT", True, LIGHTGRAY)   
+            screen.blit(fightText, (120, 622))
+        if 460 <= mouseX <= 890 and 592 <= mouseY <= 692:
+            bagText = font.render("BACK", True, LIGHTGRAY)   
+            screen.blit(bagText, (585, 622))
+        if 15 <= mouseX <= 450 and 702 <= mouseY <= 787:
+            pokemonText = font.render("POKéMON", True, LIGHTGRAY)   
+            screen.blit(pokemonText, (60, 722))
+        if 460 <= mouseX <= 890 and 702 <= mouseY <= 787:
+            runText = font.render("RUN", True, LIGHTGRAY)   
+            screen.blit(runText, (605, 722))
+    
+    if gamestate == "fightMenu":
+        screen.blit(battleBg,(0,0))
+        screen.blit(aiground,(690,280))
+        screen.blit(userCharizardIdle,(100,350))
+        screen.blit(opponentBlastoiseIdle,(710,55))
+        screen.blit(fightUI,(0,575))
+
+        bagText = font.render("BACK", True, WHITE)   
+        screen.blit(bagText, (585, 622))
+
+        if 460 <= mouseX <= 890 and 592 <= mouseY <= 692:
+            bagText = font.render("BACK", True, LIGHTGRAY)   
+            screen.blit(bagText, (585, 622))
 
 
-    pygame.draw.rect(screen, ORANGE, (190, 570, 105, 90), border_radius = 10)
-    textSurface = font.render("BAG", True, 'black')
-    screen.blit(textSurface, (220, 610))
 
-    pygame.draw.rect(screen, BLUE, (315, 570, 105, 90), border_radius = 10)
-    textSurface = font.render("RUN", True, 'black')
-    screen.blit(textSurface, (340, 610))
-
-    pygame.draw.rect(screen, GREEN, (440, 570, 105, 90), border_radius = 10)
-    textSurface = font.render("POKéMON", True, 'black')
-    screen.blit(textSurface, (460, 610))
-
-
-
-    # RENDER YOUR GAME HERE
-    userCharizardIdle.render(screen,(210,180))
-    opponentBlastoiseIdle.render(screen,(390,110))
+        # RENDER YOUR GAME HERE
 
     # flip() the display to put your work on screen
     pygame.display.flip()
