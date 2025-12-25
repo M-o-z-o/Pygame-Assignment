@@ -55,7 +55,8 @@ userCharizardIdle = pygame.image.load("charizard.png")
 opponentBlastoiseIdle = pygame.image.load("blastoise.png")
 
 battleBg = pygame.image.load("battlebggold (1).png")
-aiground = pygame.image.load("aiground (1).png")
+aiGround = pygame.image.load("aiground (1).png")
+playerGround = pygame.image.load("playerground.png")
 fightUI = pygame.image.load("battleUI.png")
 fightUI2 = pygame.image.load("pixil-frame-0 (1).png")
 
@@ -79,47 +80,46 @@ clock = pygame.time.Clock()
 running = True
 
 while running:
-    # poll for events
-    # pygame.QUIT event means the user clicked X to close your window
+    mouseX, mouseY = pygame.mouse.get_pos()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        mouseX, mouseY = pygame.mouse.get_pos()
-    print(mouseX, mouseY)
 
-    # checking if left mouse button is clicked
-    if event.type == pygame.MOUSEBUTTONDOWN:
-        if gamestate == "battleMenu":
-            if 15 <= mouseX <= 450 and 592 <= mouseY <= 692:
-                gamestate = "fightMenu"
-            if 460 <= mouseX <= 890 and 592 <= mouseY <= 692:
-                gamestate = "homeMenu"
-            if 15 <= mouseX <= 450 and 702 <= mouseY <= 787:
-                gamestate = "pokemonMenu"
-            if 460 <= mouseX <= 890 and 702 <= mouseY <= 787:
-                gamestate = "runMenu"
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            clickX, clickY = event.pos
 
-        if gamestate == "fightMenu":
-            if 460 <= mouseX <= 890 and 592 <= mouseY <= 692:
-                gamestate = "battleMenu"
+            if gamestate == "battleMenu":
+                if 15 <= mouseX <= 450 and 592 <= mouseY <= 692:
+                    gamestate = "fightMenu"
+                elif 460 <= mouseX <= 890 and 592 <= mouseY <= 692:
+                    gamestate = "homeMenu"
+                elif 15 <= mouseX <= 450 and 702 <= mouseY <= 787:
+                    gamestate = "pokemonMenu"
+                elif 460 <= mouseX <= 890 and 702 <= mouseY <= 787:
+                    gamestate = "runMenu"
 
-    if gamestate == "homePage":  
+            elif gamestate == "fightMenu":
+                if 460 <= mouseX <= 890 and 592 <= mouseY <= 692:
+                    gamestate = "battleMenu"
+
+    if gamestate == "homeMenu":  
         screen.blit(battleBg,(0,0))
-        screen.blit(aiground,(690,280))
+        screen.blit(aiGround,(690,280))
         screen.blit(fightUI,(0,575))
 
     if gamestate == "battleMenu":
         screen.blit(battleBg,(0,0))
-        screen.blit(aiground,(690,280))
-        screen.blit(userCharizardIdle,(100,350))
+        screen.blit(aiGround,(690,280))
+        screen.blit(playerGround,(50,500))
+        screen.blit(userCharizardIdle,(100,325))
         screen.blit(opponentBlastoiseIdle,(710,55))
         screen.blit(fightUI,(0,575))
 
         # Buttons
         fightText = font.render("FIGHT", True, WHITE)   
         screen.blit(fightText, (120, 622))
-        bagText = font.render("BACK", True, WHITE)   
-        screen.blit(bagText, (585, 622))
+        backText = font.render("BACK", True, WHITE)   
+        screen.blit(backText, (585, 622))
         pokemonText = font.render("POKéMON", True, WHITE)   
         screen.blit(pokemonText, (60, 722))
         runText = font.render("RUN", True, WHITE)   
@@ -131,8 +131,8 @@ while running:
             fightText = font.render("FIGHT", True, LIGHTGRAY)   
             screen.blit(fightText, (120, 622))
         if 460 <= mouseX <= 890 and 592 <= mouseY <= 692:
-            bagText = font.render("BACK", True, LIGHTGRAY)   
-            screen.blit(bagText, (585, 622))
+            backText = font.render("BACK", True, LIGHTGRAY)   
+            screen.blit(backText, (585, 622))
         if 15 <= mouseX <= 450 and 702 <= mouseY <= 787:
             pokemonText = font.render("POKéMON", True, LIGHTGRAY)   
             screen.blit(pokemonText, (60, 722))
@@ -142,18 +142,18 @@ while running:
     
     if gamestate == "fightMenu":
         screen.blit(battleBg,(0,0))
-        screen.blit(aiground,(690,280))
-        screen.blit(userCharizardIdle,(100,350))
+        screen.blit(aiGround,(690,280))
+        screen.blit(playerGround,(50,500))
+        screen.blit(userCharizardIdle,(100,325))
         screen.blit(opponentBlastoiseIdle,(710,55))
         screen.blit(fightUI,(0,575))
 
-        bagText = font.render("BACK", True, WHITE)   
-        screen.blit(bagText, (585, 622))
+        backText = font.render("BACK", True, WHITE)   
+        screen.blit(backText, (585, 622))
 
         if 460 <= mouseX <= 890 and 592 <= mouseY <= 692:
-            bagText = font.render("BACK", True, LIGHTGRAY)   
-            screen.blit(bagText, (585, 622))
-
+            backText = font.render("BACK", True, LIGHTGRAY)   
+            screen.blit(backText, (585, 622))
 
 
         # RENDER YOUR GAME HERE
