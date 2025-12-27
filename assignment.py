@@ -52,7 +52,7 @@ Features Added Beyond Level 3 Requirements:
 import pygame
 
 charizard = pygame.image.load("charizard.png")
-blastoise = pygame.image.load("blastoise.png")
+opponentBlastoise = pygame.image.load("blastoise.png")
 
 battleBg = pygame.image.load("battlebggold (1).png")
 aiGround = pygame.image.load("aiground (1).png")
@@ -70,21 +70,41 @@ LIGHTGRAY = (184, 184, 184)
 WHITE = (248, 248, 248)
 
 gamestate = "battleMenu"
-playerPokemon = charizard
-opponentPokemon = blastoise
+playerPokemon = "charizard"
+opponentPokemon = "blastoise"
 
-pp = {
-    # Charizard Moves
-    "fireBlast": 5,
-    "dragonClaw": 3,
-    "slash": 10
+pokemonStats = {
+    "charizard": {
+        "pokemon": charizard,
+        "hp": 150,
+        "maxHP": 150,
+        "x": 100,
+        "y": 325,
+        "xOG": 100,
+        "yOG": 325,
+        "moves": {
+            "fireBlast": {"type": "FIRE","power": 40,"pp": 5,"maxPP": 5},
+            "dragonClaw": {"type": "DRAGON","power": 30,"pp": 3,"maxPP": 3},
+            "slash": {"type": "NORMAL","power": 20,"pp": 10,"maxPP": 10}
+        }
+    }
 }
 
-maxPP = {
-    # Charizard Moves
-    "fireBlast": 5,
-    "dragonClaw": 3,
-    "slash": 10
+opponentStats = {   
+    "blastoise": {
+        "pokemon": opponentBlastoise,
+        "hp": 160,
+        "maxHP": 160,
+        "x": 710,
+        "y": 55,
+        "xOG": 710,
+        "yOG": 55,
+        "moves": {
+            "hydroPump": {"type": "WATER","power": 40,"pp": 5,"maxPP": 5},
+            "bite": {"type": "DARK","power": 25,"pp": 10,"maxPP": 10},
+            "tackle": {"type": "NORMAL","power": 15,"pp": 15,"maxPP": 15}
+        }
+    }
 }
 
 # pygame setup
@@ -117,19 +137,19 @@ while running:
                     gamestate = "runMenu"
 
             elif gamestate == "fightMenu":
-                if playerPokemon == charizard:
+                if playerPokemon == "charizard":
                     if 15 <= mouseX <= 450 and 592 <= mouseY <= 692:
-                        if pp["fireBlast"] > 0:
-                            pp["fireBlast"] -= 1
-                            print("Fire Blast used! PP left:", pp["fireBlast"])                    
+                        if pokemonStats[playerPokemon]["moves"]["fireBlast"]["pp"] > 0:
+                            pokemonStats[playerPokemon]["moves"]["fireBlast"]["pp"] -= 1
+                            print("Fire Blast used! PP left:", pokemonStats[playerPokemon]["moves"]["fireBlast"]["pp"])                    
                     elif 460 <= mouseX <= 890 and 592 <= mouseY <= 692:
-                        if pp["slash"] > 0:
-                            pp["slash"] -= 1
-                            print("Slash used! PP left:", pp["slash"])
+                        if pokemonStats[playerPokemon]["moves"]["slash"]["pp"] > 0:
+                            pokemonStats[playerPokemon]["moves"]["slash"]["pp"] -= 1
+                            print("Slash used! PP left:", pokemonStats[playerPokemon]["moves"]["slash"]["pp"])
                     elif 15 <= mouseX <= 450 and 702 <= mouseY <= 787:
-                        if pp["dragonClaw"] > 0:
-                            pp["dragonClaw"] -= 1
-                            print("Dragon Claw used! PP left:", pp["dragonClaw"])
+                        if pokemonStats[playerPokemon]["moves"]["dragonClaw"]["pp"] > 0:
+                            pokemonStats[playerPokemon]["moves"]["dragonClaw"]["pp"] -= 1
+                            print("Dragon Claw used! PP left:", pokemonStats[playerPokemon]["moves"]["dragonClaw"]["pp"])
                     elif 460 <= mouseX <= 890 and 702 <= mouseY <= 787:
                         gamestate = "battleMenu"
 
@@ -142,8 +162,8 @@ while running:
         screen.blit(battleBg,(0,0))
         screen.blit(aiGround,(690,280))
         screen.blit(playerGround,(50,500))
-        screen.blit(playerPokemon,(100,325))
-        screen.blit(opponentPokemon,(710,55))
+        screen.blit(pokemonStats[playerPokemon]["pokemon"],(pokemonStats[playerPokemon]["xOG"],pokemonStats[playerPokemon]["yOG"]))
+        screen.blit(opponentStats[opponentPokemon]["pokemon"],(opponentStats[opponentPokemon]["xOG"],opponentStats[opponentPokemon]["yOG"]))
         screen.blit(fightUI,(0,575))
 
         # Buttons
@@ -183,11 +203,11 @@ while running:
             screen.blit(battleBg,(0,0))
             screen.blit(aiGround,(690,280))
             screen.blit(playerGround,(50,500))
-            screen.blit(playerPokemon,(100,325))
-            screen.blit(opponentPokemon,(710,55))
+            screen.blit(pokemonStats[playerPokemon]["pokemon"],(pokemonStats[playerPokemon]["xOG"],pokemonStats[playerPokemon]["yOG"]))
+            screen.blit(opponentStats[opponentPokemon]["pokemon"],(opponentStats[opponentPokemon]["xOG"],opponentStats[opponentPokemon]["yOG"]))
             screen.blit(fightUI,(0,575))
 
-            if playerPokemon == charizard:
+            if playerPokemon == "charizard":
                 fireBlastText = moveFont.render("FIRE BLAST", True, WHITE)   
                 screen.blit(fireBlastText, (70, 622))
                 backText = moveFont.render("SLASH", True, WHITE)   
@@ -202,7 +222,7 @@ while running:
                     screen.blit(fireBlastText, (70, 622))
                     attackTypeText = attackTypeFont.render("TYPE: FIRE", True, 'red')   
                     screen.blit(attackTypeText, (950, 655))
-                    PPText = attackTypeFont.render("PP:" + str(pp["fireBlast"]) + "/" + str(maxPP["fireBlast"]), True, 'black')
+                    PPText = attackTypeFont.render("PP:" + str(pokemonStats[playerPokemon]["moves"]["fireBlast"]["pp"]) + "/" + str(pokemonStats[playerPokemon]["moves"]["fireBlast"]["maxPP"]), True, 'black')
                     screen.blit(PPText, (975, 685))
 
                 if 460 <= mouseX <= 890 and 592 <= mouseY <= 692:
@@ -210,7 +230,7 @@ while running:
                     screen.blit(backText, (590, 622))
                     attackTypeText = attackTypeFont.render("TYPE: NORMAL", True, 'black')   
                     screen.blit(attackTypeText, (950, 655))
-                    PPText = attackTypeFont.render("PP:" + str(pp["slash"]) + "/" + str(maxPP["slash"]), True, 'black')   
+                    PPText = attackTypeFont.render("PP:" + str(pokemonStats[playerPokemon]["moves"]["slash"]["pp"]) + "/" + str(pokemonStats[playerPokemon]["moves"]["slash"]["maxPP"]), True, 'black')   
                     screen.blit(PPText, (975, 685))      
 
                 if 15 <= mouseX <= 450 and 702 <= mouseY <= 787:
@@ -218,7 +238,7 @@ while running:
                     screen.blit(dragonClawText, (45, 722))
                     attackTypeText = attackTypeFont.render("TYPE: DRAGON", True, 'blue')   
                     screen.blit(attackTypeText, (950, 655))
-                    PPText = attackTypeFont.render("PP:" + str(pp["dragonClaw"]) + "/" + str(maxPP["dragonClaw"]), True, 'black')   
+                    PPText = attackTypeFont.render("PP:" + str(pokemonStats[playerPokemon]["moves"]["dragonClaw"]["pp"]) + "/" + str(pokemonStats[playerPokemon]["moves"]["dragonClaw"]["maxPP"]), True, 'black')   
                     screen.blit(PPText, (975, 685))
                     
                 if 460 <= mouseX <= 890 and 702 <= mouseY <= 787:
