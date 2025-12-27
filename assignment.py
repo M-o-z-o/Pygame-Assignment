@@ -51,8 +51,8 @@ Features Added Beyond Level 3 Requirements:
 # Example file showing a basic pygame "game loop"
 import pygame
 
-userCharizardIdle = pygame.image.load("charizard.png")
-opponentBlastoiseIdle = pygame.image.load("blastoise.png")
+charizard = pygame.image.load("charizard.png")
+blastoise = pygame.image.load("blastoise.png")
 
 battleBg = pygame.image.load("battlebggold (1).png")
 aiGround = pygame.image.load("aiground (1).png")
@@ -70,10 +70,29 @@ LIGHTGRAY = (184, 184, 184)
 WHITE = (248, 248, 248)
 
 gamestate = "battleMenu"
+playerPokemon = charizard
+opponentPokemon = blastoise
+
+pp = {
+    # Charizard Moves
+    "fireBlast": 5,
+    "dragonClaw": 3,
+    "slash": 10
+}
+
+maxPP = {
+    # Charizard Moves
+    "fireBlast": 5,
+    "dragonClaw": 3,
+    "slash": 10
+}
 
 # pygame setup
 pygame.init()
-font = pygame.font.Font("PokemonGb-RAeo.ttf", 50)
+buttonFont = pygame.font.Font("PokemonGb-RAeo.ttf", 50)
+moveFont = pygame.font.Font("PokemonGb-RAeo.ttf", 35)  
+whatWillFont = pygame.font.Font("PokemonGb-RAeo.ttf", 20)
+attackTypeFont = pygame.font.Font("PokemonGb-RAeo.ttf", 15)
 
 screen = pygame.display.set_mode((1200, 800))
 clock = pygame.time.Clock()
@@ -86,7 +105,6 @@ while running:
             running = False
 
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            clickX, clickY = event.pos
 
             if gamestate == "battleMenu":
                 if 15 <= mouseX <= 450 and 592 <= mouseY <= 692:
@@ -99,8 +117,21 @@ while running:
                     gamestate = "runMenu"
 
             elif gamestate == "fightMenu":
-                if 460 <= mouseX <= 890 and 592 <= mouseY <= 692:
-                    gamestate = "battleMenu"
+                if playerPokemon == charizard:
+                    if 15 <= mouseX <= 450 and 592 <= mouseY <= 692:
+                        if pp["fireBlast"] > 0:
+                            pp["fireBlast"] -= 1
+                            print("Fire Blast used! PP left:", pp["fireBlast"])                    
+                    elif 460 <= mouseX <= 890 and 592 <= mouseY <= 692:
+                        if pp["slash"] > 0:
+                            pp["slash"] -= 1
+                            print("Slash used! PP left:", pp["slash"])
+                    elif 15 <= mouseX <= 450 and 702 <= mouseY <= 787:
+                        if pp["dragonClaw"] > 0:
+                            pp["dragonClaw"] -= 1
+                            print("Dragon Claw used! PP left:", pp["dragonClaw"])
+                    elif 460 <= mouseX <= 890 and 702 <= mouseY <= 787:
+                        gamestate = "battleMenu"
 
     if gamestate == "homeMenu":  
         screen.blit(battleBg,(0,0))
@@ -111,50 +142,88 @@ while running:
         screen.blit(battleBg,(0,0))
         screen.blit(aiGround,(690,280))
         screen.blit(playerGround,(50,500))
-        screen.blit(userCharizardIdle,(100,325))
-        screen.blit(opponentBlastoiseIdle,(710,55))
+        screen.blit(playerPokemon,(100,325))
+        screen.blit(opponentPokemon,(710,55))
         screen.blit(fightUI,(0,575))
 
         # Buttons
-        fightText = font.render("FIGHT", True, WHITE)   
+        fightText = buttonFont.render("FIGHT", True, WHITE)   
         screen.blit(fightText, (120, 622))
-        backText = font.render("BACK", True, WHITE)   
+        backText = buttonFont.render("BACK", True, WHITE)   
         screen.blit(backText, (585, 622))
-        pokemonText = font.render("POKéMON", True, WHITE)   
+        pokemonText = buttonFont.render("POKéMON", True, WHITE)   
         screen.blit(pokemonText, (60, 722))
-        runText = font.render("RUN", True, WHITE)   
+        runText = buttonFont.render("RUN", True, WHITE)   
         screen.blit(runText, (605, 722))
-
+        whatWillText = whatWillFont.render("WHAT WILL", True, 'black')   
+        screen.blit(whatWillText, (965, 630))
+        yourPokemonText = whatWillFont.render("YOUR", True, 'black')   
+        screen.blit(yourPokemonText, (1010, 660))
+        PokeText = whatWillFont.render("POKéMON", True, 'black')   
+        screen.blit(PokeText, (980, 690))
+        doText = whatWillFont.render("DO?", True, 'black')   
+        screen.blit(doText, (1020, 720))
+        
         # Mouse Hover Effect
         if 15 <= mouseX <= 450 and 592 <= mouseY <= 692:
             #screen.blit(fightUI2,(0,513))
-            fightText = font.render("FIGHT", True, LIGHTGRAY)   
+            fightText = buttonFont.render("FIGHT", True, LIGHTGRAY)   
             screen.blit(fightText, (120, 622))
         if 460 <= mouseX <= 890 and 592 <= mouseY <= 692:
-            backText = font.render("BACK", True, LIGHTGRAY)   
+            backText = buttonFont.render("BACK", True, LIGHTGRAY)   
             screen.blit(backText, (585, 622))
         if 15 <= mouseX <= 450 and 702 <= mouseY <= 787:
-            pokemonText = font.render("POKéMON", True, LIGHTGRAY)   
+            pokemonText = buttonFont.render("POKéMON", True, LIGHTGRAY)   
             screen.blit(pokemonText, (60, 722))
         if 460 <= mouseX <= 890 and 702 <= mouseY <= 787:
-            runText = font.render("RUN", True, LIGHTGRAY)   
+            runText = buttonFont.render("RUN", True, LIGHTGRAY)   
             screen.blit(runText, (605, 722))
     
     if gamestate == "fightMenu":
-        screen.blit(battleBg,(0,0))
-        screen.blit(aiGround,(690,280))
-        screen.blit(playerGround,(50,500))
-        screen.blit(userCharizardIdle,(100,325))
-        screen.blit(opponentBlastoiseIdle,(710,55))
-        screen.blit(fightUI,(0,575))
+            screen.blit(battleBg,(0,0))
+            screen.blit(aiGround,(690,280))
+            screen.blit(playerGround,(50,500))
+            screen.blit(playerPokemon,(100,325))
+            screen.blit(opponentPokemon,(710,55))
+            screen.blit(fightUI,(0,575))
 
-        backText = font.render("BACK", True, WHITE)   
-        screen.blit(backText, (585, 622))
+            if playerPokemon == charizard:
+                fireBlastText = moveFont.render("FIRE BLAST", True, WHITE)   
+                screen.blit(fireBlastText, (70, 622))
+                backText = moveFont.render("SLASH", True, WHITE)   
+                screen.blit(backText, (590, 622))
+                dragonClawText = moveFont.render("DRAGON CLAW", True, WHITE)   
+                screen.blit(dragonClawText, (45, 722))
+                slashText = buttonFont.render("RUN", True, WHITE)   
+                screen.blit(slashText, (605, 722))
 
-        if 460 <= mouseX <= 890 and 592 <= mouseY <= 692:
-            backText = font.render("BACK", True, LIGHTGRAY)   
-            screen.blit(backText, (585, 622))
+                if 15 <= mouseX <= 450 and 592 <= mouseY <= 692:
+                    fireBlastText = moveFont.render("FIRE BLAST", True, LIGHTGRAY)   
+                    screen.blit(fireBlastText, (70, 622))
+                    attackTypeText = attackTypeFont.render("TYPE: FIRE", True, 'red')   
+                    screen.blit(attackTypeText, (950, 655))
+                    PPText = attackTypeFont.render("PP:" + str(pp["fireBlast"]) + "/" + str(maxPP["fireBlast"]), True, 'black')
+                    screen.blit(PPText, (975, 685))
 
+                if 460 <= mouseX <= 890 and 592 <= mouseY <= 692:
+                    backText = moveFont.render("SLASH", True, LIGHTGRAY)   
+                    screen.blit(backText, (590, 622))
+                    attackTypeText = attackTypeFont.render("TYPE: NORMAL", True, 'black')   
+                    screen.blit(attackTypeText, (950, 655))
+                    PPText = attackTypeFont.render("PP:" + str(pp["slash"]) + "/" + str(maxPP["slash"]), True, 'black')   
+                    screen.blit(PPText, (975, 685))      
+
+                if 15 <= mouseX <= 450 and 702 <= mouseY <= 787:
+                    dragonClawText = moveFont.render("DRAGON CLAW", True, LIGHTGRAY)   
+                    screen.blit(dragonClawText, (45, 722))
+                    attackTypeText = attackTypeFont.render("TYPE: DRAGON", True, 'blue')   
+                    screen.blit(attackTypeText, (950, 655))
+                    PPText = attackTypeFont.render("PP:" + str(pp["dragonClaw"]) + "/" + str(maxPP["dragonClaw"]), True, 'black')   
+                    screen.blit(PPText, (975, 685))
+                    
+                if 460 <= mouseX <= 890 and 702 <= mouseY <= 787:
+                    slashText = buttonFont.render("RUN", True, LIGHTGRAY)   
+                    screen.blit(slashText, (605, 722))
 
         # RENDER YOUR GAME HERE
 
