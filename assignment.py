@@ -69,10 +69,6 @@ GRAY = (145, 145, 145)
 LIGHTGRAY = (184, 184, 184)
 WHITE = (248, 248, 248)
 
-gamestate = "battleMenu"
-playerPokemon = "charizard"
-opponentPokemon = "blastoise"
-
 pokemonStats = {
     "charizard": {
         "pokemon": charizard,
@@ -83,9 +79,9 @@ pokemonStats = {
         "xOG": 100,
         "yOG": 325,
         "moves": {
-            "fireBlast": {"type": "FIRE","power": 40,"pp": 5,"maxPP": 5},
+            "fireBlast": {"type": "FIRE","power": 20,"pp": 5,"maxPP": 5},
             "dragonClaw": {"type": "DRAGON","power": 30,"pp": 3,"maxPP": 3},
-            "slash": {"type": "NORMAL","power": 20,"pp": 10,"maxPP": 10}
+            "slash": {"type": "NORMAL","power": 15,"pp": 10,"maxPP": 10}
         }
     }
 }
@@ -106,6 +102,13 @@ opponentStats = {
         }
     }
 }
+
+gamestate = "battleMenu"
+playerPokemon = "charizard"
+opponentPokemon = "blastoise"
+isAttacking = False
+opponentAttack = False
+attackPos = 0
 
 # pygame setup
 pygame.init()
@@ -141,17 +144,54 @@ while running:
                     if 15 <= mouseX <= 450 and 592 <= mouseY <= 692:
                         if pokemonStats[playerPokemon]["moves"]["fireBlast"]["pp"] > 0:
                             pokemonStats[playerPokemon]["moves"]["fireBlast"]["pp"] -= 1
+                            opponentStats[opponentPokemon]["hp"] -= pokemonStats[playerPokemon]["moves"]["fireBlast"]["power"]
+                            isAttacking = True
+                            opponentAttack = True
                             print("Fire Blast used! PP left:", pokemonStats[playerPokemon]["moves"]["fireBlast"]["pp"])                    
                     elif 460 <= mouseX <= 890 and 592 <= mouseY <= 692:
                         if pokemonStats[playerPokemon]["moves"]["slash"]["pp"] > 0:
                             pokemonStats[playerPokemon]["moves"]["slash"]["pp"] -= 1
+                            opponentStats[opponentPokemon]["hp"] -= pokemonStats[playerPokemon]["moves"]["slash"]["power"]
+                            isAttacking = True
+                            opponentAttack = True
                             print("Slash used! PP left:", pokemonStats[playerPokemon]["moves"]["slash"]["pp"])
                     elif 15 <= mouseX <= 450 and 702 <= mouseY <= 787:
                         if pokemonStats[playerPokemon]["moves"]["dragonClaw"]["pp"] > 0:
                             pokemonStats[playerPokemon]["moves"]["dragonClaw"]["pp"] -= 1
+                            opponentStats[opponentPokemon]["hp"] -= pokemonStats[playerPokemon]["moves"]["dragonClaw"]["power"]
+                            isAttacking = True
+                            opponentAttack = True
                             print("Dragon Claw used! PP left:", pokemonStats[playerPokemon]["moves"]["dragonClaw"]["pp"])
                     elif 460 <= mouseX <= 890 and 702 <= mouseY <= 787:
                         gamestate = "battleMenu"
+    
+    if isAttacking:
+        if attackPos < 10:
+            pokemonStats[playerPokemon]["x"] += 5
+            pokemonStats[playerPokemon]["y"] -= 3
+        elif attackPos < 20:    
+            pokemonStats[playerPokemon]["x"] -= 5
+            pokemonStats[playerPokemon]["y"] += 3
+        else:
+            pokemonStats[playerPokemon]["x"] = pokemonStats[playerPokemon]["xOG"]
+            pokemonStats[playerPokemon]["y"] = pokemonStats[playerPokemon]["yOG"]
+            isAttacking = False
+        attackPos += 1
+    else:
+        attackPos = 0
+    
+    if opponentAttack:
+        if attackPos < 10:
+            opponentStats[opponentPokemon]["x"] -= 5
+            opponentStats[opponentPokemon]["y"] += 3
+        elif attackPos < 20:    
+            opponentStats[opponentPokemon]["x"] += 5
+            opponentStats[opponentPokemon]["y"] -= 3
+        else:
+            opponentStats[opponentPokemon]["x"] = opponentStats[opponentPokemon]["xOG"]
+            opponentStats[opponentPokemon]["y"] = opponentStats[opponentPokemon]["yOG"]
+            opponentAttack = False
+        attackPos += 1
 
     if gamestate == "homeMenu":  
         screen.blit(battleBg,(0,0))
@@ -159,11 +199,19 @@ while running:
         screen.blit(fightUI,(0,575))
 
     if gamestate == "battleMenu":
+        playerHP = pokemonStats[playerPokemon]["hp"]
+        playerMaxHP = pokemonStats[playerPokemon]["maxHP"]
+        opponentHP = opponentStats[opponentPokemon]["hp"]
+        opponentMaxHP = opponentStats[opponentPokemon]["maxHP"]
         screen.blit(battleBg,(0,0))
         screen.blit(aiGround,(690,280))
         screen.blit(playerGround,(50,500))
-        screen.blit(pokemonStats[playerPokemon]["pokemon"],(pokemonStats[playerPokemon]["xOG"],pokemonStats[playerPokemon]["yOG"]))
-        screen.blit(opponentStats[opponentPokemon]["pokemon"],(opponentStats[opponentPokemon]["xOG"],opponentStats[opponentPokemon]["yOG"]))
+        screen.blit(pokemonStats[playerPokemon]["pokemon"],(pokemonStats[playerPokemon]["x"],pokemonStats[playerPokemon]["y"]))
+        screen.blit(opponentStats[opponentPokemon]["pokemon"],(opponentStats[opponentPokemon]["x"],opponentStats[opponentPokemon]["y"]))
+        pygame.draw.rect(screen, RED, (100, 280, 200, 20))
+        pygame.draw.rect(screen, GREEN, (100, 280, 200 * (playerHP / playerMaxHP), 20))
+        pygame.draw.rect(screen, RED, (700, 20, 200, 20))
+        pygame.draw.rect(screen, GREEN, (700, 20, 200 * (opponentHP / opponentMaxHP), 20))
         screen.blit(fightUI,(0,575))
 
         # Buttons
@@ -200,11 +248,19 @@ while running:
             screen.blit(runText, (605, 722))
     
     if gamestate == "fightMenu":
+            playerHP = pokemonStats[playerPokemon]["hp"]
+            playerMaxHP = pokemonStats[playerPokemon]["maxHP"]
+            opponentHP = opponentStats[opponentPokemon]["hp"]
+            opponentMaxHP = opponentStats[opponentPokemon]["maxHP"]
             screen.blit(battleBg,(0,0))
             screen.blit(aiGround,(690,280))
             screen.blit(playerGround,(50,500))
-            screen.blit(pokemonStats[playerPokemon]["pokemon"],(pokemonStats[playerPokemon]["xOG"],pokemonStats[playerPokemon]["yOG"]))
-            screen.blit(opponentStats[opponentPokemon]["pokemon"],(opponentStats[opponentPokemon]["xOG"],opponentStats[opponentPokemon]["yOG"]))
+            screen.blit(pokemonStats[playerPokemon]["pokemon"],(pokemonStats[playerPokemon]["x"],pokemonStats[playerPokemon]["y"]))
+            screen.blit(opponentStats[opponentPokemon]["pokemon"],(opponentStats[opponentPokemon]["x"],opponentStats[opponentPokemon]["y"]))
+            pygame.draw.rect(screen, RED, (100, 280, 200, 20))
+            pygame.draw.rect(screen, GREEN, (100, 280, 200 * (playerHP / playerMaxHP), 20))
+            pygame.draw.rect(screen, RED, (700, 20, 200, 20))
+            pygame.draw.rect(screen, GREEN, (700, 20, 200 * (opponentHP / opponentMaxHP), 20))
             screen.blit(fightUI,(0,575))
 
             if playerPokemon == "charizard":
