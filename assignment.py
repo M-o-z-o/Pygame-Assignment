@@ -52,6 +52,10 @@ Features Added Beyond Level 3 Requirements:
 import pygame
 
 charizard = pygame.image.load("charizard.png")
+pikachu = pygame.image.load("pikachu.png")
+pickachuMini = pygame.image.load("pikachu mini.png")
+gardevoir = pygame.image.load("gardevoir.png")
+gardevoirMini = pygame.image.load("gardevoir mini.png")
 opponentBlastoise = pygame.image.load("blastoise.png")
 
 battleBg = pygame.image.load("battlebggold (1).png")
@@ -59,6 +63,7 @@ aiGround = pygame.image.load("aiground (1).png")
 playerGround = pygame.image.load("playerground.png")
 fightUI = pygame.image.load("battleUI.png")
 fightUI2 = pygame.image.load("pixil-frame-0 (1).png")
+pKMenuUI = pygame.image.load("pixil-frame-0 (4).png")
 
 RED = (239, 57, 56)
 ORANGE = (232, 155, 39)
@@ -82,6 +87,34 @@ pokemonStats = {
             "fireBlast": {"type": "FIRE","power": 20,"pp": 5,"maxPP": 5},
             "dragonClaw": {"type": "DRAGON","power": 30,"pp": 3,"maxPP": 3},
             "slash": {"type": "NORMAL","power": 15,"pp": 10,"maxPP": 10}
+        }
+    },
+    "pikachu": {
+        "pokemon": pikachu,
+        "hp": 100,
+        "maxHP": 100,
+        "x": 100,
+        "y": 325,
+        "xOG": 100,
+        "yOG": 325,
+        "moves": {
+            "thunderbolt": {"type": "ELECTRIC","power": 25,"pp": 5,"maxPP": 5},
+            "quickAttack": {"type": "NORMAL","power": 15,"pp": 10,"maxPP": 10},
+            "tackle": {"type": "NORMAL","power": 15,"pp": 15,"maxPP": 15}
+        }
+    },
+    "gardevoir": {
+        "pokemon": gardevoir,
+        "hp": 120,
+        "maxHP": 120,
+        "x": 50,
+        "y": 325,
+        "xOG": 50,
+        "yOG": 325,
+        "moves": {
+            "psychic": {"type": "PSYCHIC","power": 25,"pp": 5,"maxPP": 5},
+            "moonblast": {"type": "FAIRY","power": 30,"pp": 5,"maxPP": 5},
+            "tackle": {"type": "NORMAL","power": 15,"pp": 15,"maxPP": 15}
         }
     }
 }
@@ -112,6 +145,7 @@ opponentAttacking = False
 opponentIsAttacking = False
 opponentAttackPos = 0
 attackPos = 0
+pKMenuColor = (113,154,154)
 
 # pygame setup
 pygame.init()
@@ -129,6 +163,7 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        print (mouseX, mouseY)
 
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
 
@@ -141,8 +176,19 @@ while running:
                     gamestate = "pokemonMenu"
                 elif 460 <= mouseX <= 890 and 702 <= mouseY <= 787:
                     gamestate = "runMenu"
+            
+            elif gamestate == "pokemonMenu":
+                if 230 <= mouseX <= 555 and 195 <= mouseY <= 310:
+                    playerPokemon = "pikachu"
+                    gamestate = "battleMenu"
+                if 650 <= mouseX <= 980 and 195 <= mouseY <= 310:
+                    playerPokemon = "gardevoir"
+                    gamestate = "battleMenu"
 
             elif gamestate == "fightMenu" and turn == "player" and not isAttacking:
+                if 460 <= mouseX <= 890 and 702 <= mouseY <= 787:
+                       gamestate = "battleMenu"
+
                 if playerPokemon == "charizard":
                     if 15 <= mouseX <= 450 and 592 <= mouseY <= 692:
                         if pokemonStats[playerPokemon]["moves"]["fireBlast"]["pp"] > 0:
@@ -168,8 +214,58 @@ while running:
                             opponentAttacking = True
                             turn = "opponent"
                             print("Dragon Claw used! PP left:", pokemonStats[playerPokemon]["moves"]["dragonClaw"]["pp"])
-                    elif 460 <= mouseX <= 890 and 702 <= mouseY <= 787:
-                        gamestate = "battleMenu"
+
+                if playerPokemon == "pikachu":
+                    if 15 <= mouseX <= 450 and 592 <= mouseY <= 692:
+                        if pokemonStats[playerPokemon]["moves"]["thunderbolt"]["pp"] > 0:
+                            pokemonStats[playerPokemon]["moves"]["thunderbolt"]["pp"] -= 1
+                            opponentStats[opponentPokemon]["hp"] -= pokemonStats[playerPokemon]["moves"]["thunderbolt"]["power"]
+                            isAttacking = True
+                            opponentAttacking = True
+                            turn = "opponent"
+                            print("Thunderbolt used! PP left:", pokemonStats[playerPokemon]["moves"]["thunderbolt"]["pp"])                    
+                    elif 460 <= mouseX <= 890 and 592 <= mouseY <= 692:
+                        if pokemonStats[playerPokemon]["moves"]["quickAttack"]["pp"] > 0:
+                            pokemonStats[playerPokemon]["moves"]["quickAttack"]["pp"] -= 1
+                            opponentStats[opponentPokemon]["hp"] -= pokemonStats[playerPokemon]["moves"]["quickAttack"]["power"]
+                            isAttacking = True
+                            opponentAttacking = True
+                            turn = "opponent"
+                            print("Quick Attack used! PP left:", pokemonStats[playerPokemon]["moves"]["quickAttack"]["pp"])
+                    elif 15 <= mouseX <= 450 and 702 <= mouseY <= 787:
+                        if pokemonStats[playerPokemon]["moves"]["tackle"]["pp"] > 0:
+                            pokemonStats[playerPokemon]["moves"]["tackle"]["pp"] -= 1
+                            opponentStats[opponentPokemon]["hp"] -= pokemonStats[playerPokemon]["moves"]["tackle"]["power"]
+                            isAttacking = True
+                            opponentAttacking = True
+                            turn = "opponent"
+                            print("Tackle used! PP left:", pokemonStats[playerPokemon]["moves"]["tackle"]["pp"])
+
+                if playerPokemon == "gardevoir":
+                    if 15 <= mouseX <= 450 and 592 <= mouseY <= 692:
+                        if pokemonStats[playerPokemon]["moves"]["psychic"]["pp"] > 0:
+                            pokemonStats[playerPokemon]["moves"]["psychic"]["pp"] -= 1
+                            opponentStats[opponentPokemon]["hp"] -= pokemonStats[playerPokemon]["moves"]["psychic"]["power"]
+                            isAttacking = True
+                            opponentAttacking = True
+                            turn = "opponent"
+                            print("Psychic used! PP left:", pokemonStats[playerPokemon]["moves"]["psychic"]["pp"])                    
+                    elif 460 <= mouseX <= 890 and 592 <= mouseY <= 692:
+                        if pokemonStats[playerPokemon]["moves"]["moonblast"]["pp"] > 0:
+                            pokemonStats[playerPokemon]["moves"]["moonblast"]["pp"] -= 1
+                            opponentStats[opponentPokemon]["hp"] -= pokemonStats[playerPokemon]["moves"]["moonblast"]["power"]
+                            isAttacking = True
+                            opponentAttacking = True
+                            turn = "opponent"
+                            print("Moonblast used! PP left:", pokemonStats[playerPokemon]["moves"]["moonblast"]["pp"])
+                    elif 15 <= mouseX <= 450 and 702 <= mouseY <= 787:
+                        if pokemonStats[playerPokemon]["moves"]["tackle"]["pp"] > 0:
+                            pokemonStats[playerPokemon]["moves"]["tackle"]["pp"] -= 1
+                            opponentStats[opponentPokemon]["hp"] -= pokemonStats[playerPokemon]["moves"]["tackle"]["power"]
+                            isAttacking = True
+                            opponentAttacking = True
+                            turn = "opponent"
+                            print("Tackle used! PP left:", pokemonStats[playerPokemon]["moves"]["tackle"]["pp"])
     
     if isAttacking:
         if attackPos < 10:
@@ -213,6 +309,58 @@ while running:
         screen.blit(battleBg,(0,0))
         screen.blit(aiGround,(690,280))
         screen.blit(fightUI,(0,575))
+    
+    if gamestate == "pokemonMenu":
+        playerHP = pokemonStats[playerPokemon]["hp"]
+        playerMaxHP = pokemonStats[playerPokemon]["maxHP"]
+        opponentHP = opponentStats[opponentPokemon]["hp"]
+        opponentMaxHP = opponentStats[opponentPokemon]["maxHP"]
+        screen.blit(battleBg,(0,0))
+        screen.blit(aiGround,(690,280))
+        screen.blit(playerGround,(50,500))
+        screen.blit(pokemonStats[playerPokemon]["pokemon"],(pokemonStats[playerPokemon]["x"],pokemonStats[playerPokemon]["y"]))
+        screen.blit(opponentStats[opponentPokemon]["pokemon"],(opponentStats[opponentPokemon]["x"],opponentStats[opponentPokemon]["y"]))
+        pygame.draw.rect(screen, RED, (100, 280, 200, 20))
+        pygame.draw.rect(screen, GREEN, (100, 280, 200 * (playerHP / playerMaxHP), 20))
+        pygame.draw.rect(screen, RED, (700, 20, 200, 20))
+        pygame.draw.rect(screen, GREEN, (700, 20, 200 * (opponentHP / opponentMaxHP), 20))
+        screen.blit(fightUI,(0,575))
+
+        fightText = buttonFont.render("FIGHT", True, WHITE)   
+        screen.blit(fightText, (120, 622))
+        backText = buttonFont.render("BACK", True, WHITE)   
+        screen.blit(backText, (585, 622))
+        pokemonText = buttonFont.render("POKéMON", True, WHITE)   
+        screen.blit(pokemonText, (60, 722))
+        runText = buttonFont.render("RUN", True, WHITE)   
+        screen.blit(runText, (605, 722))
+        whatWillText = whatWillFont.render("WHAT WILL", True, 'black')   
+        screen.blit(whatWillText, (965, 630))
+        yourPokemonText = whatWillFont.render("YOUR", True, 'black')   
+        screen.blit(yourPokemonText, (1010, 660))
+        PokeText = whatWillFont.render("POKéMON", True, 'black')   
+        screen.blit(PokeText, (980, 690))
+        doText = whatWillFont.render("DO?", True, 'black')   
+        screen.blit(doText, (1020, 720))
+
+        BG = pygame.Surface((1200, 800))
+        BG.set_alpha(120)  
+        BG.fill("black")
+        screen.blit(BG, (0, 0))
+
+        pkMenuBG = pygame.Surface((1200, 350))
+        pkMenuBG.set_alpha(240)  
+        pkMenuBG.fill(pKMenuColor)
+        screen.blit(pkMenuBG, (0, 150))
+        screen.blit(pKMenuUI,(90,175))
+
+        screen.blit(gardevoirMini,(635,170))
+        gardevoirNameText = whatWillFont.render("GARDEVOIR", True, "black")   
+        screen.blit(gardevoirNameText, (760, 230))
+
+        screen.blit(pickachuMini,(175,100))
+        pickachuNameText = whatWillFont.render("PIKACHU", True, "black")   
+        screen.blit(pickachuNameText, (360, 230))
 
     if gamestate == "battleMenu":
         playerHP = pokemonStats[playerPokemon]["hp"]
@@ -316,6 +464,70 @@ while running:
                 '''if 460 <= mouseX <= 890 and 702 <= mouseY <= 787:
                     slashText = buttonFont.render("RUN", True, LIGHTGRAY)   
                     screen.blit(slashText, (605, 722))'''
+            
+            if playerPokemon == "pikachu":
+                thunderboltText = moveFont.render("THUNDERBOLT", True, WHITE)   
+                screen.blit(thunderboltText, (50, 622))
+                quickAttackText = moveFont.render("QUICK ATTACK", True, WHITE)   
+                screen.blit(quickAttackText, (470, 622))
+                tackleText = moveFont.render("TACKLE", True, WHITE)   
+                screen.blit(tackleText, (120, 722))
+
+                if 15 <= mouseX <= 450 and 592 <= mouseY <= 692:
+                    thunderboltText = moveFont.render("THUNDERBOLT", True, LIGHTGRAY)   
+                    screen.blit(thunderboltText, (50, 622))
+                    attackTypeText = attackTypeFont.render("TYPE: ELECTRIC", True, 'yellow')   
+                    screen.blit(attackTypeText, (950, 655))
+                    PPText = attackTypeFont.render("PP:" + str(pokemonStats[playerPokemon]["moves"]["thunderbolt"]["pp"]) + "/" + str(pokemonStats[playerPokemon]["moves"]["thunderbolt"]["maxPP"]), True, 'black')
+                    screen.blit(PPText, (975, 685))
+
+                if 460 <= mouseX <= 890 and 592 <= mouseY <= 692:
+                    quickAttackText = moveFont.render("QUICK ATTACK", True, LIGHTGRAY)   
+                    screen.blit(quickAttackText, (470, 622))
+                    attackTypeText = attackTypeFont.render("TYPE: NORMAL", True, 'black')   
+                    screen.blit(attackTypeText, (950, 655))
+                    PPText = attackTypeFont.render("PP:" + str(pokemonStats[playerPokemon]["moves"]["quickAttack"]["pp"]) + "/" + str(pokemonStats[playerPokemon]["moves"]["quickAttack"]["maxPP"]), True, 'black')   
+                    screen.blit(PPText, (975, 685))      
+
+                if 15 <= mouseX <= 450 and 702 <= mouseY <= 787:
+                    tackleText = moveFont.render("TACKLE", True, LIGHTGRAY)   
+                    screen.blit(tackleText, (120, 722))
+                    attackTypeText = attackTypeFont.render("TYPE: NORMAL", True, 'black')   
+                    screen.blit(attackTypeText, (950, 655))
+                    PPText = attackTypeFont.render("PP:" + str(pokemonStats[playerPokemon]["moves"]["tackle"]["pp"]) + "/" + str(pokemonStats[playerPokemon]["moves"]["tackle"]["maxPP"]), True, 'black')   
+                    screen.blit(PPText, (975, 685))
+
+            if playerPokemon == "gardevoir":
+                psychicText = moveFont.render("PSYCHIC", True, WHITE)   
+                screen.blit(psychicText, (115, 622))
+                moonblastText = moveFont.render("MOONBLAST", True, WHITE)   
+                screen.blit(moonblastText, (520, 622))
+                tackleText = moveFont.render("TACKLE", True, WHITE)   
+                screen.blit(tackleText, (120, 722))
+
+                if 15 <= mouseX <= 450 and 592 <= mouseY <= 692:
+                    psychicText = moveFont.render("PSYCHIC", True, LIGHTGRAY)   
+                    screen.blit(psychicText, (115, 622))
+                    attackTypeText = attackTypeFont.render("TYPE: PSYCHIC", True, 'purple')   
+                    screen.blit(attackTypeText, (950, 655))
+                    PPText = attackTypeFont.render("PP:" + str(pokemonStats[playerPokemon]["moves"]["psychic"]["pp"]) + "/" + str(pokemonStats[playerPokemon]["moves"]["psychic"]["maxPP"]), True, 'black')
+                    screen.blit(PPText, (975, 685))
+
+                if 460 <= mouseX <= 890 and 592 <= mouseY <= 692:
+                    moonblastText = moveFont.render("MOONBLAST", True, LIGHTGRAY)   
+                    screen.blit(moonblastText, (520, 622))
+                    attackTypeText = attackTypeFont.render("TYPE: FAIRY", True, 'pink')   
+                    screen.blit(attackTypeText, (950, 655))
+                    PPText = attackTypeFont.render("PP:" + str(pokemonStats[playerPokemon]["moves"]["moonblast"]["pp"]) + "/" + str(pokemonStats[playerPokemon]["moves"]["moonblast"]["maxPP"]), True, 'black')   
+                    screen.blit(PPText, (975, 685))      
+
+                if 15 <= mouseX <= 450 and 702 <= mouseY <= 787:
+                    tackleText = moveFont.render("TACKLE", True, LIGHTGRAY)   
+                    screen.blit(tackleText, (120, 722))
+                    attackTypeText = attackTypeFont.render("TYPE: NORMAL", True, 'black')   
+                    screen.blit(attackTypeText, (950, 655))
+                    PPText = attackTypeFont.render("PP:" + str(pokemonStats[playerPokemon]["moves"]["tackle"]["pp"]) + "/" + str(pokemonStats[playerPokemon]["moves"]["tackle"]["maxPP"]), True, 'black')   
+                    screen.blit(PPText, (975, 685))
 
         # RENDER YOUR GAME HERE
 
