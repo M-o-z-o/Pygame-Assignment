@@ -96,8 +96,8 @@ opponentStats = {
         "xOG": 710,
         "yOG": 55,
         "moves": {
-            "hydroPump": {"type": "WATER","power": 40,"pp": 5,"maxPP": 5},
-            "bite": {"type": "DARK","power": 25,"pp": 10,"maxPP": 10},
+            "hydroPump": {"type": "WATER","power": 30,"pp": 5,"maxPP": 5},
+            "bite": {"type": "DARK","power": 20,"pp": 10,"maxPP": 10},
             "tackle": {"type": "NORMAL","power": 15,"pp": 15,"maxPP": 15}
         }
     }
@@ -106,8 +106,11 @@ opponentStats = {
 gamestate = "battleMenu"
 playerPokemon = "charizard"
 opponentPokemon = "blastoise"
+turn = "player"
 isAttacking = False
-opponentAttack = False
+opponentAttacking = False
+opponentIsAttacking = False
+opponentAttackPos = 0
 attackPos = 0
 
 # pygame setup
@@ -139,28 +142,31 @@ while running:
                 elif 460 <= mouseX <= 890 and 702 <= mouseY <= 787:
                     gamestate = "runMenu"
 
-            elif gamestate == "fightMenu":
+            elif gamestate == "fightMenu" and turn == "player" and not isAttacking:
                 if playerPokemon == "charizard":
                     if 15 <= mouseX <= 450 and 592 <= mouseY <= 692:
                         if pokemonStats[playerPokemon]["moves"]["fireBlast"]["pp"] > 0:
                             pokemonStats[playerPokemon]["moves"]["fireBlast"]["pp"] -= 1
                             opponentStats[opponentPokemon]["hp"] -= pokemonStats[playerPokemon]["moves"]["fireBlast"]["power"]
                             isAttacking = True
-                            opponentAttack = True
+                            opponentAttacking = True
+                            turn = "opponent"
                             print("Fire Blast used! PP left:", pokemonStats[playerPokemon]["moves"]["fireBlast"]["pp"])                    
                     elif 460 <= mouseX <= 890 and 592 <= mouseY <= 692:
                         if pokemonStats[playerPokemon]["moves"]["slash"]["pp"] > 0:
                             pokemonStats[playerPokemon]["moves"]["slash"]["pp"] -= 1
                             opponentStats[opponentPokemon]["hp"] -= pokemonStats[playerPokemon]["moves"]["slash"]["power"]
                             isAttacking = True
-                            opponentAttack = True
+                            opponentAttacking = True
+                            turn = "opponent"
                             print("Slash used! PP left:", pokemonStats[playerPokemon]["moves"]["slash"]["pp"])
                     elif 15 <= mouseX <= 450 and 702 <= mouseY <= 787:
                         if pokemonStats[playerPokemon]["moves"]["dragonClaw"]["pp"] > 0:
                             pokemonStats[playerPokemon]["moves"]["dragonClaw"]["pp"] -= 1
                             opponentStats[opponentPokemon]["hp"] -= pokemonStats[playerPokemon]["moves"]["dragonClaw"]["power"]
                             isAttacking = True
-                            opponentAttack = True
+                            opponentAttacking = True
+                            turn = "opponent"
                             print("Dragon Claw used! PP left:", pokemonStats[playerPokemon]["moves"]["dragonClaw"]["pp"])
                     elif 460 <= mouseX <= 890 and 702 <= mouseY <= 787:
                         gamestate = "battleMenu"
@@ -178,20 +184,30 @@ while running:
             isAttacking = False
         attackPos += 1
     else:
-        attackPos = 0
-    
-    if opponentAttack:
-        if attackPos < 10:
+        attackPos = 0   
+        if turn == "opponent":
+            opponentIsAttacking = True
+        
+    if opponentIsAttacking:
+        if opponentAttackPos < 10:
             opponentStats[opponentPokemon]["x"] -= 5
             opponentStats[opponentPokemon]["y"] += 3
-        elif attackPos < 20:    
+        elif opponentAttackPos < 20:    
             opponentStats[opponentPokemon]["x"] += 5
             opponentStats[opponentPokemon]["y"] -= 3
         else:
             opponentStats[opponentPokemon]["x"] = opponentStats[opponentPokemon]["xOG"]
             opponentStats[opponentPokemon]["y"] = opponentStats[opponentPokemon]["yOG"]
-            opponentAttack = False
-        attackPos += 1
+            opponentIsAttacking = False
+            opponentAttackPos = 0
+            if opponentAttacking:
+                pokemonStats[playerPokemon]["hp"] -= opponentStats[opponentPokemon]["moves"]["bite"]["power"]
+            if pokemonStats[playerPokemon]["hp"] < 0:
+                pokemonStats[playerPokemon]["hp"] = 0
+            turn = "player"
+            gamestate = "battleMenu"
+
+        opponentAttackPos += 1
 
     if gamestate == "homeMenu":  
         screen.blit(battleBg,(0,0))
@@ -270,8 +286,8 @@ while running:
                 screen.blit(backText, (590, 622))
                 dragonClawText = moveFont.render("DRAGON CLAW", True, WHITE)   
                 screen.blit(dragonClawText, (45, 722))
-                slashText = buttonFont.render("RUN", True, WHITE)   
-                screen.blit(slashText, (605, 722))
+                '''slashText = buttonFont.render("RUN", True, WHITE)   
+                screen.blit(slashText, (605, 722))'''
 
                 if 15 <= mouseX <= 450 and 592 <= mouseY <= 692:
                     fireBlastText = moveFont.render("FIRE BLAST", True, LIGHTGRAY)   
@@ -297,9 +313,9 @@ while running:
                     PPText = attackTypeFont.render("PP:" + str(pokemonStats[playerPokemon]["moves"]["dragonClaw"]["pp"]) + "/" + str(pokemonStats[playerPokemon]["moves"]["dragonClaw"]["maxPP"]), True, 'black')   
                     screen.blit(PPText, (975, 685))
                     
-                if 460 <= mouseX <= 890 and 702 <= mouseY <= 787:
+                '''if 460 <= mouseX <= 890 and 702 <= mouseY <= 787:
                     slashText = buttonFont.render("RUN", True, LIGHTGRAY)   
-                    screen.blit(slashText, (605, 722))
+                    screen.blit(slashText, (605, 722))'''
 
         # RENDER YOUR GAME HERE
 
