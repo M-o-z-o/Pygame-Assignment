@@ -63,6 +63,8 @@ celebi = pygame.image.load("celebi.png")
 celebiMini = pygame.image.load("celebi mini.png")
 lucario = pygame.image.load("lucario.png")
 lucarioMini = pygame.image.load("lucario mini.png")
+rayquaza = pygame.image.load("rayquaza.png")
+rayquazaMini = pygame.image.load("rayquaza mini.png")
 
 opponentBlastoise = pygame.image.load("blastoise.png")
 opponentGengar = pygame.image.load("gengar.png")
@@ -158,6 +160,20 @@ pokemonStats = {
             "dragonPulse": {"type": "DRAGON","power": 30,"pp": 5,"maxPP": 5},
             "tackle": {"type": "NORMAL","power": 10,"pp": 15,"maxPP": 15}
         }
+    },
+    "rayquaza": {
+    "pokemon": rayquaza,
+    "hp": 160,
+    "maxHP": 160,
+    "x": 65,
+    "y": 280,
+    "xOG": 50,
+    "yOG": 325,
+    "moves": {
+        "aurasphere": {"type": "FIGHTING","power": 25,"pp": 5,"maxPP": 5},
+        "dragonPulse": {"type": "DRAGON","power": 30,"pp": 5,"maxPP": 5},
+        "tackle": {"type": "NORMAL","power": 10,"pp": 15,"maxPP": 15}
+}
     }
 }
 
@@ -209,7 +225,7 @@ opponentStats = {
 gamestate = "homeMenu"
 playerTeam = ["pikachu", "gardevoir", "celebi", "lucario", "charizard"]
 playerTeamNumber = 0
-playerPokemon = playerTeam[4]
+playerPokemon = playerTeam[0]
 opponentTeam = ["blastoise", "gengar", "mewtwo"]
 opponentTeamNumber = 0
 opponentPokemon = opponentTeam[opponentTeamNumber]
@@ -219,6 +235,8 @@ opponentAttacking = False
 opponentIsAttacking = False
 playerPokemonFainted = False
 currentMusic = False
+team1 = False
+team2 = False
 opponentAttackPos = 0
 attackPos = 0
 pKMenuColor = (113,154,154)
@@ -301,6 +319,22 @@ while running:
                 if 310 <= mouseX <= 915 and 375 <= mouseY <= 460:
                     buttonClickedSound.play()
                     gamestate = "battleMenu"
+                if 310 <= mouseX <= 915 and 470 <= mouseY <= 565:
+                    buttonClickedSound.play()
+                    gamestate = "pokemonTeam"
+
+            if gamestate == "pokemonTeam":
+                if mouseX >= 310 and mouseX <= 915 and mouseY >= 375 and mouseY <= 460:
+                    buttonClickedSound.play()
+                    team2 = True
+                    team1 = False
+                if 310 <= mouseX <= 915 and 470 <= mouseY <= 565:
+                    buttonClickedSound.play()
+                    team2 = True
+                    team1 = False
+                if 900 <= mouseX <= 1190 and 630 <= mouseY <= 715:
+                    buttonClickedSound.play()
+                    gamestate = "homeMenu"
 
             if gamestate == "battleMenu":
                 if 15 <= mouseX <= 450 and 592 <= mouseY <= 692:
@@ -509,7 +543,7 @@ while running:
 
     if hasPP == True:
         chosenMove = random.choice(moveList)
-        while opponentStats[opponentPokemon]["moves"][chosenMove]["pp"] == 0:
+        while opponentStats[opponentPokemon]["moves"][chosenMove]["pp"] == 0:       
             chosenMove = random.choice(moveList)
         move = opponentStats[opponentPokemon]["moves"][chosenMove]
 
@@ -576,14 +610,26 @@ while running:
          pokemonStats["lucario"]["hp"] == 0):
         gamestate = "loseMenu"
 
+    if team1 == True:
+        playerTeam = ["pikachu", "gardevoir", "celebi", "lucario", "charizard"]
+        playerPokemon = playerTeam[0]
+
+    if team2 == True:
+        playerTeam = ["rayquaza", "gardevoir", "celebi", "lucario", "charizard"]
+        playerPokemon = playerTeam[0]
+
     if gamestate == "winMenu":
         pygame.mixer.music.stop()
         screen.fill(BEIGE)
         winText = menuFont.render("YOU WIN!", True, 'green')   
-        screen.blit(winText, (330, 375))
+        screen.blit(winText, (355, 375))
         pygame.draw.rect(screen, LIGHTGRAY, (360, 500, 505, 85))
         playAgainText = buttonFont.render("PLAY AGAIN", True, 'black')
         screen.blit(playAgainText, (365, 525))
+
+        if 360 <= mouseX <= 865 and 500 <= mouseY <= 585:
+            pygame.draw.rect(screen, "darkgray", (360, 500, 505, 85))
+            screen.blit(buttonFont.render("PLAY AGAIN", True, 'black'), (365, 525))
 
     if gamestate == "loseMenu":
         pygame.mixer.music.stop()
@@ -594,25 +640,74 @@ while running:
         playAgainText = buttonFont.render("PLAY AGAIN", True, 'black')
         screen.blit(playAgainText, (365, 525))
 
+        if 360 <= mouseX <= 865 and 500 <= mouseY <= 585:
+            pygame.draw.rect(screen, "darkgray", (360, 500, 505, 85))
+            screen.blit(buttonFont.render("PLAY AGAIN", True, 'black'), (365, 525))
+
     if gamestate == "homeMenu":  
         screen.fill('black')
         screen.blit(mainMenuBg,(0,20))
         homeMenuText = menuFont.render("PYMON", True, 'black')   
-        screen.blit(homeMenuText, (445, 30))
+        screen.blit(homeMenuText, (445, 40))
         titleText = buttonFont.render("MewTwo's", True, 'purple')   
-        screen.blit(titleText, (260, 120))
+        screen.blit(titleText, (260, 130))
         titleText2 = buttonFont.render("Reign", True, 'white')
-        screen.blit(titleText2, (700, 120))
+        screen.blit(titleText2, (700, 130))
         pygame.draw.rect(screen, 'black', (305, 370, 615, 95))
         pygame.draw.rect(screen, SKYBLUE, (310, 375, 605, 85))
+        pygame.draw.rect(screen, 'black', (305, 470, 615, 95))
+        pygame.draw.rect(screen, SKYBLUE, (310, 475, 605, 85))
         startText = buttonFont.render("START BATTLE", True, 'black')
         screen.blit(startText, (315, 395))
+        pokemonTeamText = buttonFont.render("POKéMON TEAM", True, 'black')
+        screen.blit(pokemonTeamText, (315,500))
+
 
         if mouseX >= 310 and mouseX <= 915 and mouseY >= 375 and mouseY <= 460:
             pygame.draw.rect(screen, 'black', (305, 370, 615, 95))
             pygame.draw.rect(screen, 'lightblue', (310, 375, 605, 85))
             startText = buttonFont.render("START BATTLE", True, 'black')
             screen.blit(startText, (315, 395))
+
+        if 310 <= mouseX <= 915 and 470 <= mouseY <= 565:
+            pygame.draw.rect(screen, 'black', (305, 470, 615, 95))
+            pygame.draw.rect(screen, 'lightblue', (310, 475, 605, 85))
+            pokemonTeamText = buttonFont.render("POKéMON TEAM", True, 'black')
+            screen.blit(pokemonTeamText, (315,500))
+
+    if gamestate == "pokemonTeam":
+        screen.fill('black')
+        screen.blit(mainMenuBg,(0,20))
+        pygame.draw.rect(screen, 'black', (305, 370, 615, 95))
+        pygame.draw.rect(screen, SKYBLUE, (310, 375, 605, 85))
+        pygame.draw.rect(screen, 'black', (305, 470, 615, 95))
+        pygame.draw.rect(screen, SKYBLUE, (310, 475, 605, 85))
+        pygame.draw.rect(screen, 'black', (900, 630, 290, 95))
+        pygame.draw.rect(screen, SKYBLUE, (905, 635, 280, 85))
+        startText = buttonFont.render("TEAM 1", True, 'black')
+        screen.blit(startText, (315, 395))
+        pokemonTeamText = buttonFont.render("TEAM 2", True, 'black')
+        screen.blit(pokemonTeamText, (315,500))
+        pokemonTeamText = buttonFont.render("BACK", True, 'black')
+        screen.blit(pokemonTeamText, (950,655))
+
+        if mouseX >= 310 and mouseX <= 915 and mouseY >= 375 and mouseY <= 460:
+            pygame.draw.rect(screen, 'black', (305, 370, 615, 95))
+            pygame.draw.rect(screen, 'lightblue', (310, 375, 605, 85))
+            startText = buttonFont.render("TEAM 1", True, 'black')
+            screen.blit(startText, (315, 395))
+
+        elif 310 <= mouseX <= 915 and 470 <= mouseY <= 565:
+            pygame.draw.rect(screen, 'black', (305, 470, 615, 95))
+            pygame.draw.rect(screen, 'lightblue', (310, 475, 605, 85))
+            pokemonTeamText = buttonFont.render("TEAM 2", True, 'black')
+            screen.blit(pokemonTeamText, (315,500))
+
+        elif 900 <= mouseX <= 1190 and 630 <= mouseY <= 715:
+            pygame.draw.rect(screen, 'black', (900, 630, 290, 95))
+            pygame.draw.rect(screen, 'lightblue', (905, 635, 280, 85))
+            pokemonTeamText = buttonFont.render("BACK", True, 'black')
+            screen.blit(pokemonTeamText, (950,655))
 
     if gamestate == "pokemonMenu":
         playerHP = pokemonStats[playerPokemon]["hp"]
@@ -669,31 +764,61 @@ while running:
         backText = whatWillFont.render("BACK", True, WHITE)
         screen.blit(backText, (1100, 450))
 
-        screen.blit(pickachuMini,(-35,100))
-        pickachuNameText = whatWillFont.render("PIKACHU", True, "black")   
-        screen.blit(pickachuNameText, (135, 230))
+        if team1 == True:
 
-        screen.blit(gardevoirMini,(420,170))
-        gardevoirNameText = whatWillFont.render("GARDEVOIR", True, "black")   
-        screen.blit(gardevoirNameText, (545, 230))
+            screen.blit(pickachuMini,(-35,100))
+            pickachuNameText = whatWillFont.render("PIKACHU", True, "black")   
+            screen.blit(pickachuNameText, (135, 230))
 
-        screen.blit(celebiMini,(-45,255))
-        celebiNameText = whatWillFont.render("CELEBI", True, "black")
-        screen.blit(celebiNameText, (135, 385))
+            screen.blit(gardevoirMini,(420,170))
+            gardevoirNameText = whatWillFont.render("GARDEVOIR", True, "black")   
+            screen.blit(gardevoirNameText, (545, 230))
 
-        screen.blit(lucarioMini,(430,325))
-        lucarioNameText = whatWillFont.render("LUCARIO", True, "black")
-        screen.blit(lucarioNameText, (560, 385))
+            screen.blit(celebiMini,(-45,255))
+            celebiNameText = whatWillFont.render("CELEBI", True, "black")
+            screen.blit(celebiNameText, (135, 385))
 
-        screen.blit(charizardMini,(855,260))
-        charizardNameText = whatWillFont.render("CHARIZARD", True, "black")
-        screen.blit(charizardNameText, (970, 315))
+            screen.blit(lucarioMini,(430,325))
+            lucarioNameText = whatWillFont.render("LUCARIO", True, "black")
+            screen.blit(lucarioNameText, (560, 385))
 
-        screen.blit(whatWillFont.render(str(pokemonStats["pikachu"]["hp"]) + "/" + str(pokemonStats["pikachu"]["maxHP"]), True, "black"), (145, 285))
-        screen.blit(whatWillFont.render(str(pokemonStats["gardevoir"]["hp"]) + "/" + str(pokemonStats["gardevoir"]["maxHP"]), True, "black"), (570, 285))
-        screen.blit(whatWillFont.render(str(pokemonStats["celebi"]["hp"]) + "/" + str(pokemonStats["celebi"]["maxHP"]), True, "black"), (145, 440))
-        screen.blit(whatWillFont.render(str(pokemonStats["lucario"]["hp"]) + "/" + str(pokemonStats["lucario"]["maxHP"]), True, "black"), (570, 440))
-        screen.blit(whatWillFont.render(str(pokemonStats["charizard"]["hp"]) + "/" + str(pokemonStats["charizard"]["maxHP"]), True, "black"), (985, 370))
+            screen.blit(charizardMini,(855,260))
+            charizardNameText = whatWillFont.render("CHARIZARD", True, "black")
+            screen.blit(charizardNameText, (970, 315))
+
+        if team2 == True:
+            screen.blit(rayquazaMini,(15,205))
+            rayquazaNameText = whatWillFont.render("RAYQUAZA", True, "black")   
+            screen.blit(rayquazaNameText, (135, 230))
+
+            screen.blit(gardevoirMini,(420,170))
+            gardevoirNameText = whatWillFont.render("GARDEVOIR", True, "black")   
+            screen.blit(gardevoirNameText, (545, 230))
+
+            screen.blit(celebiMini,(-45,255))
+            celebiNameText = whatWillFont.render("CELEBI", True, "black")
+            screen.blit(celebiNameText, (135, 385))
+
+            screen.blit(lucarioMini,(430,325))
+            lucarioNameText = whatWillFont.render("LUCARIO", True, "black")
+            screen.blit(lucarioNameText, (560, 385))
+
+            screen.blit(charizardMini,(855,260))
+            charizardNameText = whatWillFont.render("CHARIZARD", True, "black")
+            screen.blit(charizardNameText, (970, 315))
+
+        if team1 == True:
+            screen.blit(whatWillFont.render(str(pokemonStats["pikachu"]["hp"]) + "/" + str(pokemonStats["pikachu"]["maxHP"]), True, "black"), (145, 285))
+            screen.blit(whatWillFont.render(str(pokemonStats["gardevoir"]["hp"]) + "/" + str(pokemonStats["gardevoir"]["maxHP"]), True, "black"), (570, 285))
+            screen.blit(whatWillFont.render(str(pokemonStats["celebi"]["hp"]) + "/" + str(pokemonStats["celebi"]["maxHP"]), True, "black"), (145, 440))
+            screen.blit(whatWillFont.render(str(pokemonStats["lucario"]["hp"]) + "/" + str(pokemonStats["lucario"]["maxHP"]), True, "black"), (570, 440))
+            screen.blit(whatWillFont.render(str(pokemonStats["charizard"]["hp"]) + "/" + str(pokemonStats["charizard"]["maxHP"]), True, "black"), (985, 370))
+        if team2 == True:
+            screen.blit(whatWillFont.render(str(pokemonStats["rayquaza"]["hp"]) + "/" + str(pokemonStats["rayquaza"]["maxHP"]), True, "black"), (145, 285))
+            screen.blit(whatWillFont.render(str(pokemonStats["gardevoir"]["hp"]) + "/" + str(pokemonStats["gardevoir"]["maxHP"]), True, "black"), (570, 285))
+            screen.blit(whatWillFont.render(str(pokemonStats["celebi"]["hp"]) + "/" + str(pokemonStats["celebi"]["maxHP"]), True, "black"), (145, 440))
+            screen.blit(whatWillFont.render(str(pokemonStats["lucario"]["hp"]) + "/" + str(pokemonStats["lucario"]["maxHP"]), True, "black"), (570, 440))
+            screen.blit(whatWillFont.render(str(pokemonStats["charizard"]["hp"]) + "/" + str(pokemonStats["charizard"]["maxHP"]), True, "black"), (985, 370))
 
         if pokemonStats["pikachu"]["hp"] == 0:
             pygame.draw.line(screen, RED, (10, 195), (340, 310), 5)
