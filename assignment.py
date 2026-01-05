@@ -65,6 +65,10 @@ lucario = pygame.image.load("lucario.png")
 lucarioMini = pygame.image.load("lucario mini.png")
 rayquaza = pygame.image.load("rayquaza.png")
 rayquazaMini = pygame.image.load("rayquaza mini.png")
+hypno = pygame.image.load("hypno.png")
+metagross = pygame.image.load("metagross.png")
+snorlax = pygame.image.load("snorlax.png")
+umbreon = pygame.image.load("umbreon.png")
 
 opponentBlastoise = pygame.image.load("blastoise.png")
 opponentGengar = pygame.image.load("gengar.png")
@@ -163,6 +167,62 @@ pokemonStats = {
     },
     "rayquaza": {
     "pokemon": rayquaza,
+    "hp": 160,
+    "maxHP": 160,
+    "x": 65,
+    "y": 280,
+    "xOG": 50,
+    "yOG": 325,
+    "moves": {
+        "aurasphere": {"type": "FIGHTING","power": 25,"pp": 5,"maxPP": 5},
+        "dragonPulse": {"type": "DRAGON","power": 30,"pp": 5,"maxPP": 5},
+        "tackle": {"type": "NORMAL","power": 10,"pp": 15,"maxPP": 15}
+}
+    },
+    "metagross": {
+    "pokemon": metagross,
+    "hp": 160,
+    "maxHP": 160,
+    "x": 65,
+    "y": 280,
+    "xOG": 50,
+    "yOG": 325,
+    "moves": {
+        "aurasphere": {"type": "FIGHTING","power": 25,"pp": 5,"maxPP": 5},
+        "dragonPulse": {"type": "DRAGON","power": 30,"pp": 5,"maxPP": 5},
+        "tackle": {"type": "NORMAL","power": 10,"pp": 15,"maxPP": 15}
+}
+    },
+    "umbreon": {
+    "pokemon": umbreon,
+    "hp": 160,
+    "maxHP": 160,
+    "x": 65,
+    "y": 280,
+    "xOG": 50,
+    "yOG": 325,
+    "moves": {
+        "aurasphere": {"type": "FIGHTING","power": 25,"pp": 5,"maxPP": 5},
+        "dragonPulse": {"type": "DRAGON","power": 30,"pp": 5,"maxPP": 5},
+        "tackle": {"type": "NORMAL","power": 10,"pp": 15,"maxPP": 15}
+}
+    },
+    "hypno": {
+    "pokemon": hypno,
+    "hp": 160,
+    "maxHP": 160,
+    "x": 65,
+    "y": 280,
+    "xOG": 50,
+    "yOG": 325,
+    "moves": {
+        "aurasphere": {"type": "FIGHTING","power": 25,"pp": 5,"maxPP": 5},
+        "dragonPulse": {"type": "DRAGON","power": 30,"pp": 5,"maxPP": 5},
+        "tackle": {"type": "NORMAL","power": 10,"pp": 15,"maxPP": 15}
+}
+    },
+    "snorlax": {
+    "pokemon": snorlax,
     "hp": 160,
     "maxHP": 160,
     "x": 65,
@@ -615,7 +675,7 @@ while running:
         playerPokemon = playerTeam[0]
 
     if team2 == True:
-        playerTeam = ["rayquaza", "gardevoir", "celebi", "lucario", "charizard"]
+        playerTeam = ["rayquaza", "snorlax", "umbreon", "metagross", "hypno"]
         playerPokemon = playerTeam[0]
 
     if gamestate == "winMenu":
