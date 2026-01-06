@@ -315,7 +315,7 @@ while running:
                     gamestate = "pokemonMenu"
                 elif 460 <= mouseX <= 890 and 702 <= mouseY <= 787:
                     buttonClickedSound.play()
-                    gamestate = "runMenu"
+                    gamestate = "homeMenu"
 
             elif gamestate == "pokemonMenu":
                 if 10 <= mouseX <= 340 and 195 <= mouseY <= 310 and pokemonStats[playerTeam[0]]["hp"] > 0:
@@ -349,6 +349,7 @@ while running:
 
             elif gamestate == "fightMenu" and turn == "player" and not isAttacking:
                 if 460 <= mouseX <= 890 and 702 <= mouseY <= 787:
+                    buttonClickedSound.play()
                     gamestate = "battleMenu"
 
                 if playerPokemon == "charizard":
@@ -581,10 +582,15 @@ while running:
         pygame.mixer.music.stop()
         screen.fill(BEIGE)
         winText = menuFont.render("YOU WIN!", True, 'green')   
-        screen.blit(winText, (330, 375))
-        pygame.draw.rect(screen, LIGHTGRAY, (360, 500, 505, 85))
+        screen.blit(winText, (350, 375))
+        pygame.draw.rect(screen, LIGHTGRAY, (355, 500, 510, 85))
         playAgainText = buttonFont.render("PLAY AGAIN", True, 'black')
         screen.blit(playAgainText, (365, 525))
+
+        if 355 <= mouseX <= 865 and 500 <= mouseY <= 585:
+            pygame.draw.rect(screen, 'darkgray', (355, 500, 510, 85))
+            playAgainText = buttonFont.render("PLAY AGAIN", True, 'black')
+            screen.blit(playAgainText, (365, 525))
 
     if gamestate == "loseMenu":
         pygame.mixer.music.stop()
@@ -595,15 +601,20 @@ while running:
         playAgainText = buttonFont.render("PLAY AGAIN", True, 'black')
         screen.blit(playAgainText, (365, 525))
 
+        if 360 <= mouseX <= 865 and 500 <= mouseY <= 585:
+            pygame.draw.rect(screen, 'darkgray', (360, 500, 505, 85))
+            playAgainText = buttonFont.render("PLAY AGAIN", True, 'black')
+            screen.blit(playAgainText, (365, 525))
+
     if gamestate == "homeMenu":  
         screen.fill('black')
         screen.blit(mainMenuBg,(0,20))
         homeMenuText = menuFont.render("PYMON", True, 'black')       
-        screen.blit(homeMenuText, (445, 30))
+        screen.blit(homeMenuText, (445, 45))
         titleText = buttonFont.render("MewTwo's", True, 'purple')   
-        screen.blit(titleText, (260, 120))
+        screen.blit(titleText, (260, 135))
         titleText2 = buttonFont.render("Reign", True, 'white')
-        screen.blit(titleText2, (700, 120))
+        screen.blit(titleText2, (700, 135))
         pygame.draw.rect(screen, 'black', (305, 370, 615, 95))
         pygame.draw.rect(screen, SKYBLUE, (310, 375, 605, 85))
         startText = buttonFont.render("START BATTLE", True, 'black')
@@ -807,6 +818,12 @@ while running:
             screen.blit(pokemonHealthText, (1010, 527))
             opponentNameText = pokemonNameFont.render(opponentPokemon.upper(), True, 'black')   
             screen.blit(opponentNameText, (30, 85))
+            backText = buttonFont.render("BACK", True, WHITE)   
+            screen.blit(backText, (585, 722))
+
+            if 460 <= mouseX <= 890 and 702 <= mouseY <= 787:
+                backText = buttonFont.render("BACK", True, LIGHTGRAY)   
+                screen.blit(backText, (585, 722))
 
             if playerPokemon == "charizard":
                 fireBlastText = moveFont.render("FIRE BLAST", True, WHITE)   
@@ -815,8 +832,6 @@ while running:
                 screen.blit(backText, (590, 622))
                 dragonClawText = moveFont.render("DRAGON CLAW", True, WHITE)   
                 screen.blit(dragonClawText, (45, 722))
-                '''slashText = buttonFont.render("RUN", True, WHITE)   
-                screen.blit(slashText, (605, 722))'''
 
                 if 15 <= mouseX <= 450 and 592 <= mouseY <= 692:
                     fireBlastText = moveFont.render("FIRE BLAST", True, LIGHTGRAY)   
@@ -841,10 +856,6 @@ while running:
                     screen.blit(attackTypeText, (950, 655))
                     PPText = attackTypeFont.render("PP:" + str(pokemonStats[playerPokemon]["moves"]["dragonClaw"]["pp"]) + "/" + str(pokemonStats[playerPokemon]["moves"]["dragonClaw"]["maxPP"]), True, 'black')   
                     screen.blit(PPText, (975, 685))
-
-                '''if 460 <= mouseX <= 890 and 702 <= mouseY <= 787:
-                    slashText = buttonFont.render("RUN", True, LIGHTGRAY)   
-                    screen.blit(slashText, (605, 722))'''
 
             if playerPokemon == "pikachu":
                 thunderboltText = moveFont.render("THUNDERBOLT", True, WHITE)   
