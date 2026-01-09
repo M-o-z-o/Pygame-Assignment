@@ -53,31 +53,33 @@ import pygame
 import random
 import os
 
-charizard = pygame.image.load("charizard.png")
-charizardMini = pygame.image.load("charizard mini.png")
-pikachu = pygame.image.load("pikachu.png")
-pickachuMini = pygame.image.load("pikachu mini.png")
-gardevoir = pygame.image.load("gardevoir.png")
-gardevoirMini = pygame.image.load("gardevoir mini.png")
-celebi = pygame.image.load("celebi.png")
-celebiMini = pygame.image.load("celebi mini.png")
-lucario = pygame.image.load("lucario.png")
-lucarioMini = pygame.image.load("lucario mini.png")
+dir = os.path.dirname(os.path.abspath(__file__))    
 
-opponentBlastoise = pygame.image.load("blastoise.png")
-opponentGengar = pygame.image.load("gengar.png")
-opponentMewtwo = pygame.image.load("mewtwo.png")
+charizard = pygame.image.load(os.path.join(dir,"charizard.png"))
+charizardMini = pygame.image.load(os.path.join(dir,"charizard mini.png"))
+pikachu = pygame.image.load(os.path.join(dir,"pikachu.png"))
+pickachuMini = pygame.image.load(os.path.join(dir,"pikachu mini.png"))
+gardevoir = pygame.image.load(os.path.join(dir,"gardevoir.png"))
+gardevoirMini = pygame.image.load(os.path.join(dir,"gardevoir mini.png"))
+celebi = pygame.image.load(os.path.join(dir,"celebi.png"))
+celebiMini = pygame.image.load(os.path.join(dir,"celebi mini.png"))
+lucario = pygame.image.load(os.path.join(dir,"lucario.png"))
+lucarioMini = pygame.image.load(os.path.join(dir,"lucario mini.png"))
 
-mainMenuBg = pygame.image.load("pokeball bg.webp")
-mainMenuBg = pygame.image.load("mewtwos reign bg.jpg")
-battleBg = pygame.image.load("battlebggold (1).png")
-aiGround = pygame.image.load("aiground (1).png")
-playerGround = pygame.image.load("playerground.png")
-fightUI = pygame.image.load("battleUI.png")
-fightUI2 = pygame.image.load("pixil-frame-0 (1).png")
-pKMenuUI = pygame.image.load("pixil-frame-0 (5).png")
-opponentHealthBar = pygame.image.load("pixil-frame-0 (8).png")
-playerHealthBar = pygame.image.load("pixil-frame-0 (10).png")
+opponentBlastoise = pygame.image.load(os.path.join(dir,"blastoise.png"))
+opponentGengar = pygame.image.load(os.path.join(dir,"gengar.png"))
+opponentMewtwo = pygame.image.load(os.path.join(dir,"mewtwo.png"))
+
+mainMenuBg = pygame.image.load(os.path.join(dir,"pokeball bg.webp"))
+mainMenuBg = pygame.image.load(os.path.join(dir,"mewtwos reign bg.jpg"))
+battleBg = pygame.image.load(os.path.join(dir,"battlebggold (1).png"))
+aiGround = pygame.image.load(os.path.join(dir,"aiground (1).png"))
+playerGround = pygame.image.load(os.path.join(dir,"playerground.png"))
+fightUI = pygame.image.load(os.path.join(dir,"battleUI.png"))
+fightUI2 = pygame.image.load(os.path.join(dir,"pixil-frame-0 (1).png"))
+pKMenuUI = pygame.image.load(os.path.join(dir,"pixil-frame-0 (5).png"))
+opponentHealthBar = pygame.image.load(os.path.join(dir,"pixil-frame-0 (8).png"))
+playerHealthBar = pygame.image.load(os.path.join(dir,"pixil-frame-0 (10).png"))
 
 RED = (239, 57, 56)
 ORANGE = (232, 155, 39)
@@ -228,21 +230,21 @@ pKMenuColor = (113,154,154)
 pygame.init()
 pygame.mixer.init()
 
-mainMenuMusic = pygame.mixer.Sound("_Mewtwos Theme_ - Pokmon Suite.mp3")
+mainMenuMusic = pygame.mixer.Sound(os.path.join(dir,"_Mewtwos Theme_ - Pokmon Suite.mp3"))
 mainMenuMusic.set_volume(0.3)
-battleMusic = pygame.mixer.Sound("Pokmon Sun  Moon - Battle Legend Red  Blue Battle Music HQ.mp3")
+battleMusic = pygame.mixer.Sound(os.path.join(dir,"Pokmon Sun  Moon - Battle Legend Red  Blue Battle Music HQ.mp3"))
 battleMusic.set_volume(0.3)
-mewtwoBattleMusic = pygame.mixer.Sound("Pokmon The Origins Recreation - Mewtwo Battle HQ.mp3")
+mewtwoBattleMusic = pygame.mixer.Sound(os.path.join(dir,"Pokmon The Origins Recreation - Mewtwo Battle HQ.mp3"))
 mewtwoBattleMusic.set_volume(0.3)
-buttonClickedSound = pygame.mixer.Sound("Pokemon A Button - Sound Effect HD.mp3")
+buttonClickedSound = pygame.mixer.Sound(os.path.join(dir,"Pokemon A Button - Sound Effect HD.mp3"))
 buttonClickedSound.set_volume(0.5)
 
-menuFont = pygame.font.Font("PokemonGb-RAeo.ttf", 65)
-buttonFont = pygame.font.Font("PokemonGb-RAeo.ttf", 50)
-pokemonNameFont = pygame.font.Font("PokemonGb-RAeo.ttf", 30)
-moveFont = pygame.font.Font("PokemonGb-RAeo.ttf", 35)  
-whatWillFont = pygame.font.Font("PokemonGb-RAeo.ttf", 20)
-attackTypeFont = pygame.font.Font("PokemonGb-RAeo.ttf", 15)
+menuFont = pygame.font.Font(os.path.join(dir,"PokemonGb-RAeo.ttf"), 65)
+buttonFont = pygame.font.Font(os.path.join(dir,"PokemonGb-RAeo.ttf"), 50)
+pokemonNameFont = pygame.font.Font(os.path.join(dir,"PokemonGb-RAeo.ttf"), 30)
+moveFont = pygame.font.Font(os.path.join(dir,"PokemonGb-RAeo.ttf"), 35)
+whatWillFont = pygame.font.Font(os.path.join(dir,"PokemonGb-RAeo.ttf"), 20)
+attackTypeFont = pygame.font.Font(os.path.join(dir,"PokemonGb-RAeo.ttf"), 15)
 
 screen = pygame.display.set_mode((1200, 800))
 clock = pygame.time.Clock()
@@ -497,24 +499,6 @@ while running:
                             turn = "opponent"
                             print("Tackle used! PP left:", pokemonStats[playerPokemon]["moves"]["tackle"]["pp"])
 
-    if opponentPokemon == "blastoise":
-        moveList = ["hydroPump", "bite", "tackle"]
-    elif opponentPokemon == "gengar":
-        moveList = ["shadowBall", "darkPulse", "tackle"]
-    elif opponentPokemon == "mewtwo":
-        moveList = ["futureSight", "shadowBall", "tackle"]
-
-    hasPP = False
-    for moveName in moveList:
-        if opponentStats[opponentPokemon]["moves"][moveName]["pp"] > 0:
-            hasPP = True
-
-    if hasPP == True:
-        chosenMove = random.choice(moveList)
-        while opponentStats[opponentPokemon]["moves"][chosenMove]["pp"] == 0:
-            chosenMove = random.choice(moveList)
-        move = opponentStats[opponentPokemon]["moves"][chosenMove]
-
     if isAttacking:
         if attackPos < 10:
             pokemonStats[playerPokemon]["x"] += 5
@@ -533,6 +517,24 @@ while running:
         attackPos = 0   
         if turn == "opponent":
             opponentIsAttacking = True
+
+    if opponentPokemon == "blastoise":
+        moveList = ["hydroPump", "bite", "tackle"]
+    elif opponentPokemon == "gengar":
+        moveList = ["shadowBall", "darkPulse", "tackle"]
+    elif opponentPokemon == "mewtwo":
+        moveList = ["futureSight", "shadowBall", "tackle"]
+
+    hasPP = False
+    for moveName in moveList:
+        if opponentStats[opponentPokemon]["moves"][moveName]["pp"] > 0:
+            hasPP = True
+
+    if hasPP == True:
+        chosenMove = random.choice(moveList)
+        while opponentStats[opponentPokemon]["moves"][chosenMove]["pp"] == 0:
+            chosenMove = random.choice(moveList)
+        move = opponentStats[opponentPokemon]["moves"][chosenMove]
 
     if opponentIsAttacking:
         if opponentAttackPos < 10:
