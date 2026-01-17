@@ -1,46 +1,73 @@
 '''
 -----------------------------------------------------------------------------
-Program Name: (never put your personal name or information on the Internet)
-Program Description:
+Program Name: Pymon Mewtwo's Reign 
+Program Description: Pymon Mewtwo's Reign is a turn-based battle game inspired by the Pokémon
+games. The player controls a team of five Pokémon and battles against an
+computer controlled team of three Pokémon. Each Pokémon has unique stats, health
+points, and a set of moves with limited PP. The player can attack, switch
+Pokémon, and use their team to defeat the enemy Pokémon.
 
 -----------------------------------------------------------------------------
 References:
 
-(put a link to your reference here but also add a comment in the code below where you used the reference)
+(https://www.pygame.org/docs/) 
+https://stackoverflow.com/questions/918154/relative-paths-in-python used it for the relative file paths in pygame.
 
 -----------------------------------------------------------------------------
 
 Additional Libraries/Extensions:
 
-(put a list of required extensions so that the user knows that they need to download extra features)
-
+(random)
+(os)
 -----------------------------------------------------------------------------
 
-Known bugs:
+Known bugs: 
 
-(put a list of known bugs here, if you have any)
+(none)
 
 ----------------------------------------------------------------------------
 
 
 Program Reflection:
-I think this project deserves a level XXXXXX because ...
+I think this project deserves a level 4+ because i made a full
+turn-based battle system where the opponent is controlled by the computer and
+selects moves randomly, and I also met all the minimum requirements of the project.
 
- Level 3 Requirements Met:
-• 
-•  
-•  
-•  
-•  
-• 
+Level 3 Requirements Met:
+The game uses user events (keyboard and/or mouse input from the user)
+All user input is sanitized (ie, won't crash your program)
+The program must use a variable.
+Use appropriate data types (int, String, long).
+Use conditional structures (if-statement, boolean operators).
+Use loop structures (for, while).
+Create and use custom functions.
+Encapsulate the final program to include multiple screens with a menu system to move between them. (For example: an intro screen, main screen, and end screen).
+The program should have clear instructions on how to use/play.
+The program must have a soundtrack and sounds.
+The program uses images
+Coding decisions should make sense and not include grossly inefficient code.
+The program must have collision detection
+The program must have a custom downloaded font
+
+Code Organization (level 3)
+Your code should follow internal documentation standards: 
+Program and methods should have headers.
+Do not put your name in the header!
+Summary
+Description
+Parameter list
+Returns
+Warning
+Raises/Exceptions
+Frequent comments to help future readers understand code.
+Proper Indentation
+Use names that are descriptive and make sense when making variables, lists, methods etc….
+Names are as short as possible without losing descriptive meaning..
+Names use proper naming conventions such as CamelCase for Java or snake_case for Python and capitalized Object names etc…
+
 
 Features Added Beyond Level 3 Requirements:
-• 
-•  
-•  
-•  
-•  
-• 
+Random computer picked attacks for turn based combat.
 -----------------------------------------------------------------------------
 '''
 
@@ -48,13 +75,14 @@ Features Added Beyond Level 3 Requirements:
 #https://pokemondb.net/move/generation/5
 #https://pokemondb.net/sprites
 
-# Example file showing a basic pygame "game loop"
+# Libraries 
 import pygame
 import random
 import os
 
 dir = os.path.dirname(os.path.abspath(__file__))    
 
+# Sprites
 charizard = pygame.image.load(os.path.join(dir,"charizard.png"))
 charizardMini = pygame.image.load(os.path.join(dir,"charizard mini.png"))
 pikachu = pygame.image.load(os.path.join(dir,"pikachu.png"))
@@ -70,6 +98,7 @@ opponentBlastoise = pygame.image.load(os.path.join(dir,"blastoise.png"))
 opponentGengar = pygame.image.load(os.path.join(dir,"gengar.png"))
 opponentMewtwo = pygame.image.load(os.path.join(dir,"mewtwo.png"))
 
+# UI
 mainMenuBg = pygame.image.load(os.path.join(dir,"pokeball bg.webp"))
 mainMenuBg = pygame.image.load(os.path.join(dir,"mewtwos reign bg.jpg"))
 battleBg = pygame.image.load(os.path.join(dir,"battlebggold (1).png"))
@@ -81,6 +110,7 @@ pKMenuUI = pygame.image.load(os.path.join(dir,"pixil-frame-0 (5).png"))
 opponentHealthBar = pygame.image.load(os.path.join(dir,"pixil-frame-0 (8).png"))
 playerHealthBar = pygame.image.load(os.path.join(dir,"pixil-frame-0 (10).png"))
 
+# Colours
 RED = (239, 57, 56)
 ORANGE = (232, 155, 39)
 BLUE = (42, 148, 206)
@@ -91,6 +121,7 @@ LIGHTGRAY = (184, 184, 184)
 WHITE = (248, 248, 248)
 SKYBLUE = (74,107,138)
 
+# Dictionaries 
 pokemonStats = {
     "charizard": {
         "pokemon": charizard,
@@ -209,6 +240,7 @@ opponentStats = {
     }
 }
 
+# Variables
 gamestate = "homeMenu"
 playerTeam = ["pikachu", "gardevoir", "celebi", "lucario", "charizard"]
 playerTeamNumber = 0
@@ -225,11 +257,16 @@ currentMusic = False
 opponentAttackPos = 0
 attackPos = 0
 pKMenuColor = (113,154,154)
+playerHP = pokemonStats[playerPokemon]["hp"]
+playerMaxHP = pokemonStats[playerPokemon]["maxHP"]
+opponentHP = opponentStats[opponentPokemon]["hp"]
+opponentMaxHP = opponentStats[opponentPokemon]["maxHP"]
 
 # pygame setup
 pygame.init()
 pygame.mixer.init()
 
+# Sounds Effects and Music
 mainMenuMusic = pygame.mixer.Sound(os.path.join(dir,"_Mewtwos Theme_ - Pokmon Suite.mp3"))
 mainMenuMusic.set_volume(0.3)
 battleMusic = pygame.mixer.Sound(os.path.join(dir,"Pokmon Sun  Moon - Battle Legend Red  Blue Battle Music HQ.mp3"))
@@ -239,6 +276,7 @@ mewtwoBattleMusic.set_volume(0.3)
 buttonClickedSound = pygame.mixer.Sound(os.path.join(dir,"Pokemon A Button - Sound Effect HD.mp3"))
 buttonClickedSound.set_volume(0.5)
 
+# Fonts
 menuFont = pygame.font.Font(os.path.join(dir,"PokemonGb-RAeo.ttf"), 65)
 buttonFont = pygame.font.Font(os.path.join(dir,"PokemonGb-RAeo.ttf"), 50)
 pokemonNameFont = pygame.font.Font(os.path.join(dir,"PokemonGb-RAeo.ttf"), 30)
@@ -250,6 +288,25 @@ screen = pygame.display.set_mode((1200, 800))
 clock = pygame.time.Clock()
 running = True
 
+# Displays the main battle screen
+def drawBattleScreen():
+        playerHP = pokemonStats[playerPokemon]["hp"]
+        playerMaxHP = pokemonStats[playerPokemon]["maxHP"]
+        opponentHP = opponentStats[opponentPokemon]["hp"]
+        opponentMaxHP = opponentStats[opponentPokemon]["maxHP"]
+        screen.blit(battleBg,(0,0))
+        screen.blit(aiGround,(690,280))
+        screen.blit(playerGround,(50,500))
+        screen.blit(pokemonStats[playerPokemon]["pokemon"],(pokemonStats[playerPokemon]["x"],pokemonStats[playerPokemon]["y"]))
+        screen.blit(opponentStats[opponentPokemon]["pokemon"],(opponentStats[opponentPokemon]["x"],opponentStats[opponentPokemon]["y"]))
+        screen.blit(fightUI,(0,575))
+        screen.blit(playerHealthBar, (700, 360))
+        screen.blit(opponentHealthBar, (-68, -25))
+        pygame.draw.rect(screen, RED, (982, 493, 192, 12))
+        pygame.draw.rect(screen, GREEN, (982, 493, 192 * (playerHP / playerMaxHP), 12))
+        pygame.draw.rect(screen, RED, (203, 136, 192, 12))
+        pygame.draw.rect(screen, GREEN, (203, 136, 192 * (opponentHP / opponentMaxHP), 12))
+
 while running:
     mouseX, mouseY = pygame.mouse.get_pos()
     for event in pygame.event.get():
@@ -257,7 +314,9 @@ while running:
             running = False
         #print(mouseX, mouseY)
 
+        # Checking if left mouse button is down
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            # Resetting game after win or lose
             if gamestate == "winMenu" or gamestate == "loseMenu":
                 if 360 <= mouseX <= 865 and 500 <= mouseY <= 585:
                     buttonClickedSound.play()
@@ -298,7 +357,9 @@ while running:
                     opponentIsAttacking = False
                     playerPokemonFainted = False
                     currentMusic = False
-                    
+            
+            # Checking for which menu and wether mouse is clicked and if, 
+            # it will play a click sound and change screens
             if gamestate == "homeMenu":  
                 if 310 <= mouseX <= 915 and 375 <= mouseY <= 460:
                     buttonClickedSound.play()
@@ -326,6 +387,8 @@ while running:
                     buttonClickedSound.play()
                     gamestate = "homeMenu"
 
+            # Changing the players pokemon by going through a list 
+            # depending on the button clicked 
             elif gamestate == "pokemonMenu":
                 if 10 <= mouseX <= 340 and 195 <= mouseY <= 310 and pokemonStats[playerTeam[0]]["hp"] > 0:
                     buttonClickedSound.play()
@@ -356,11 +419,14 @@ while running:
                     buttonClickedSound.play()
                     gamestate = "battleMenu"
 
+            # Switching back to the battle menu after animations
             elif gamestate == "fightMenu" and turn == "player" and not isAttacking:
                 if 460 <= mouseX <= 890 and 702 <= mouseY <= 787:
                     buttonClickedSound.play()
                     gamestate = "battleMenu"
 
+                # Removes one PP from the players pokemon after a move is used 
+                # And removes HP from the oppononet pokemon
                 if playerPokemon == "charizard":
                     if 15 <= mouseX <= 450 and 592 <= mouseY <= 692:
                         buttonClickedSound.play()
@@ -390,6 +456,8 @@ while running:
                             turn = "opponent"
                             print("Dragon Claw used! PP left:", pokemonStats[playerPokemon]["moves"]["dragonClaw"]["pp"])
 
+                # Removes one PP from the players pokemon after a move is used 
+                # And removes HP from the oppononet pokemon
                 if playerPokemon == "pikachu":
                     if 15 <= mouseX <= 450 and 592 <= mouseY <= 692:
                         buttonClickedSound.play()
@@ -419,6 +487,8 @@ while running:
                             turn = "opponent"
                             print("Tackle used! PP left:", pokemonStats[playerPokemon]["moves"]["tackle"]["pp"])
 
+                # Removes one PP from the players pokemon after a move is used 
+                # And removes HP from the oppononet pokemon
                 if playerPokemon == "gardevoir":
                     if 15 <= mouseX <= 450 and 592 <= mouseY <= 692:
                         buttonClickedSound.play()
@@ -448,6 +518,8 @@ while running:
                             turn = "opponent"
                             print("Tackle used! PP left:", pokemonStats[playerPokemon]["moves"]["tackle"]["pp"])
 
+                # Removes one PP from the players pokemon after a move is used 
+                # And removes HP from the oppononet pokemon
                 if playerPokemon == "celebi":
                     if 15 <= mouseX <= 450 and 592 <= mouseY <= 692:
                         buttonClickedSound.play()
@@ -477,6 +549,8 @@ while running:
                             turn = "opponent"
                             print("Tackle used! PP left:", pokemonStats[playerPokemon]["moves"]["tackle"]["pp"])
 
+                # Removes one PP from the players pokemon after a move is used 
+                # And removes HP from the oppononet pokemon
                 if playerPokemon == "lucario":
                     if 15 <= mouseX <= 450 and 592 <= mouseY <= 692:
                         buttonClickedSound.play()
@@ -506,6 +580,7 @@ while running:
                             turn = "opponent"
                             print("Tackle used! PP left:", pokemonStats[playerPokemon]["moves"]["tackle"]["pp"])
 
+    # Animation for the player pokemon
     if isAttacking:
         if attackPos < 10:
             pokemonStats[playerPokemon]["x"] += 5
@@ -525,6 +600,7 @@ while running:
         if turn == "opponent":
             opponentIsAttacking = True
 
+    # List for opponnet pokemon moves
     if opponentPokemon == "blastoise":
         moveList = ["hydroPump", "bite", "tackle"]
     elif opponentPokemon == "gengar":
@@ -532,17 +608,20 @@ while running:
     elif opponentPokemon == "mewtwo":
         moveList = ["futureSight", "shadowBall", "tackle"]
 
+    # Checks if opponnet pokemon has any moves with PP
     hasPP = False
     for moveName in moveList:
         if opponentStats[opponentPokemon]["moves"][moveName]["pp"] > 0:
             hasPP = True
 
+    # If opponnet pokemon has a move with PP it will choose a random one from the list
     if hasPP == True:
         chosenMove = random.choice(moveList)
         while opponentStats[opponentPokemon]["moves"][chosenMove]["pp"] == 0:
             chosenMove = random.choice(moveList)
         move = opponentStats[opponentPokemon]["moves"][chosenMove]
 
+    # Animations for the opponent pokemon
     if opponentIsAttacking:
         if opponentAttackPos < 10:
             opponentStats[opponentPokemon]["x"] -= 5
@@ -555,6 +634,7 @@ while running:
             opponentStats[opponentPokemon]["y"] = opponentStats[opponentPokemon]["yOG"]
             opponentIsAttacking = False
             opponentAttackPos = 0
+            # Removes HP from player pokemon and removes PP from opponent pokemon
             if opponentAttacking and hasPP == True:
                 pokemonStats[playerPokemon]["hp"] -= move["power"]
                 opponentStats[opponentPokemon]["moves"][chosenMove]["pp"] -= 1
@@ -566,8 +646,11 @@ while running:
 
         opponentAttackPos += 1
 
+    # If an opponent pokemon dies it will switch to the next one in the team
     if opponentStats[opponentPokemon]["hp"] == 0:
         opponentTeamNumber += 1
+        # Checks if the index number of the team is less than the length 
+        # if it is, it will switch to the next in the team, else you win
         if opponentTeamNumber < len(opponentTeam):
             opponentPokemon = opponentTeam[opponentTeamNumber]
             opponentStats[opponentPokemon]["hp"] = opponentStats[opponentPokemon]["maxHP"]
@@ -576,10 +659,13 @@ while running:
         else:
             gamestate = "winMenu"
 
+    # If player pokemon HP is 0 than it will send you to the pokemon menu 
+    # too pick your next one
     if pokemonStats[playerPokemon]["hp"] == 0 and not playerPokemonFainted:
         playerPokemonFainted = True
         gamestate = "pokemonMenu"
 
+    # If all of the players pokemon are fainted then you are sent to the lose menu
     if ( pokemonStats["charizard"]["hp"] == 0 and
          pokemonStats["pikachu"]["hp"] == 0 and
          pokemonStats["gardevoir"]["hp"] == 0 and
@@ -587,6 +673,7 @@ while running:
          pokemonStats["lucario"]["hp"] == 0):
         gamestate = "loseMenu"
 
+    # win menu with the text, buttons, and hover effect of the buttons
     if gamestate == "winMenu":
         pygame.mixer.music.stop()
         screen.fill(BEIGE)
@@ -601,6 +688,7 @@ while running:
             playAgainText = buttonFont.render("PLAY AGAIN", True, 'black')
             screen.blit(playAgainText, (365, 525))
 
+    # Lose menu with the text, buttons, and hover effect of the buttons
     if gamestate == "loseMenu":
         pygame.mixer.music.stop()
         screen.fill(BEIGE)
@@ -615,6 +703,7 @@ while running:
             playAgainText = buttonFont.render("PLAY AGAIN", True, 'black')
             screen.blit(playAgainText, (365, 525))
 
+    # Home menu with the text, buttons, and hover effect of the buttons
     if gamestate == "homeMenu":  
         screen.fill('black')
         screen.blit(mainMenuBg,(0,20))
@@ -645,6 +734,7 @@ while running:
             howToText = buttonFont.render("HOW TO PLAY!", True, 'black')
             screen.blit(howToText, (315, 525))
 
+    # How to play menu with the text, buttons, and hover effect of the buttons
     if gamestate == "howToMenu":
         screen.fill('black')
         screen.blit(mainMenuBg,(0,20))
@@ -675,22 +765,9 @@ while running:
             backText = pokemonNameFont.render("BACK", True, 'black')
             screen.blit(backText, (1020, 752))
 
+    # Pokemon menu with the text, buttons, and hover effect of the buttons
     if gamestate == "pokemonMenu":
-        playerHP = pokemonStats[playerPokemon]["hp"]
-        playerMaxHP = pokemonStats[playerPokemon]["maxHP"]
-        opponentHP = opponentStats[opponentPokemon]["hp"]
-        opponentMaxHP = opponentStats[opponentPokemon]["maxHP"]
-        screen.blit(battleBg,(0,0))
-        screen.blit(aiGround,(690,280))
-        screen.blit(playerGround,(50,500))
-        screen.blit(pokemonStats[playerPokemon]["pokemon"],(pokemonStats[playerPokemon]["x"],pokemonStats[playerPokemon]["y"]))
-        screen.blit(opponentStats[opponentPokemon]["pokemon"],(opponentStats[opponentPokemon]["x"],opponentStats[opponentPokemon]["y"]))
-        screen.blit(playerHealthBar, (700, 360))
-        screen.blit(opponentHealthBar, (-68, -25))
-        pygame.draw.rect(screen, RED, (982, 493, 192, 12))
-        pygame.draw.rect(screen, GREEN, (982, 493, 192 * (playerHP / playerMaxHP), 12))
-        pygame.draw.rect(screen, RED, (203, 136, 192, 12))
-        pygame.draw.rect(screen, GREEN, (203, 136, 192 * (opponentHP / opponentMaxHP), 12))
+        drawBattleScreen()
         screen.blit(fightUI,(0,575))
 
         fightText = buttonFont.render("FIGHT", True, WHITE)   
@@ -751,12 +828,14 @@ while running:
         charizardNameText = whatWillFont.render("CHARIZARD", True, "black")
         screen.blit(charizardNameText, (970, 315))
 
+        # Displays HP for your pokemon
         screen.blit(whatWillFont.render(str(pokemonStats["pikachu"]["hp"]) + "/" + str(pokemonStats["pikachu"]["maxHP"]), True, "black"), (145, 285))
         screen.blit(whatWillFont.render(str(pokemonStats["gardevoir"]["hp"]) + "/" + str(pokemonStats["gardevoir"]["maxHP"]), True, "black"), (570, 285))
         screen.blit(whatWillFont.render(str(pokemonStats["celebi"]["hp"]) + "/" + str(pokemonStats["celebi"]["maxHP"]), True, "black"), (145, 440))
         screen.blit(whatWillFont.render(str(pokemonStats["lucario"]["hp"]) + "/" + str(pokemonStats["lucario"]["maxHP"]), True, "black"), (570, 440))
         screen.blit(whatWillFont.render(str(pokemonStats["charizard"]["hp"]) + "/" + str(pokemonStats["charizard"]["maxHP"]), True, "black"), (985, 370))
 
+        # Displays a red X on the pokemon if it is fainted
         if pokemonStats["pikachu"]["hp"] == 0:
             pygame.draw.line(screen, RED, (10, 195), (340, 310), 5)
             pygame.draw.line(screen, RED, (340, 195), (10, 310), 5)
@@ -787,24 +866,9 @@ while running:
         if 855 <= mouseX <= 1180 and 280 <= mouseY <= 400:
            pygame.draw.rect(screen, LIGHTGRAY, (855, 280, 325, 115), 5)
 
+    # Battle menu with the text, buttons, and hover effect of the buttons
     if gamestate == "battleMenu":
-        playerHP = pokemonStats[playerPokemon]["hp"]
-        playerMaxHP = pokemonStats[playerPokemon]["maxHP"]
-        opponentHP = opponentStats[opponentPokemon]["hp"]
-        opponentMaxHP = opponentStats[opponentPokemon]["maxHP"]
-        screen.blit(battleBg,(0,0))
-        screen.blit(aiGround,(690,280))
-        screen.blit(playerGround,(50,500))
-        screen.blit(pokemonStats[playerPokemon]["pokemon"],(pokemonStats[playerPokemon]["x"],pokemonStats[playerPokemon]["y"]))
-        screen.blit(opponentStats[opponentPokemon]["pokemon"],(opponentStats[opponentPokemon]["x"],opponentStats[opponentPokemon]["y"]))
-        screen.blit(fightUI,(0,575))
-        screen.blit(playerHealthBar, (700, 360))
-        screen.blit(opponentHealthBar, (-68, -25))
-        pygame.draw.rect(screen, RED, (982, 493, 192, 12))
-        pygame.draw.rect(screen, GREEN, (982, 493, 192 * (playerHP / playerMaxHP), 12))
-        pygame.draw.rect(screen, RED, (203, 136, 192, 12))
-        pygame.draw.rect(screen, GREEN, (203, 136, 192 * (opponentHP / opponentMaxHP), 12))
-        
+        drawBattleScreen()
         # Buttons
         fightText = buttonFont.render("FIGHT", True, WHITE)   
         screen.blit(fightText, (120, 622))
@@ -844,22 +908,9 @@ while running:
             runText = buttonFont.render("RUN", True, LIGHTGRAY)   
             screen.blit(runText, (605, 722))
 
+    # Fight menu with the text, buttons, and hover effect of the buttons
     if gamestate == "fightMenu":
-            playerHP = pokemonStats[playerPokemon]["hp"]
-            playerMaxHP = pokemonStats[playerPokemon]["maxHP"]
-            opponentHP = opponentStats[opponentPokemon]["hp"]
-            opponentMaxHP = opponentStats[opponentPokemon]["maxHP"]
-            screen.blit(battleBg,(0,0))
-            screen.blit(aiGround,(690,280))
-            screen.blit(playerGround,(50,500))
-            screen.blit(pokemonStats[playerPokemon]["pokemon"],(pokemonStats[playerPokemon]["x"],pokemonStats[playerPokemon]["y"]))
-            screen.blit(opponentStats[opponentPokemon]["pokemon"],(opponentStats[opponentPokemon]["x"],opponentStats[opponentPokemon]["y"]))
-            screen.blit(playerHealthBar, (700, 360))
-            screen.blit(opponentHealthBar, (-68, -25))
-            pygame.draw.rect(screen, RED, (982, 493, 192, 12))
-            pygame.draw.rect(screen, GREEN, (982, 493, 192 * (playerHP / playerMaxHP), 12))
-            pygame.draw.rect(screen, RED, (203, 136, 192, 12))
-            pygame.draw.rect(screen, GREEN, (203, 136, 192 * (opponentHP / opponentMaxHP), 12))
+            drawBattleScreen()
             screen.blit(fightUI,(0,575))
             pokemonNameText = pokemonNameFont.render(playerPokemon.upper(), True, 'black')   
             screen.blit(pokemonNameText, (795, 445))
@@ -874,6 +925,7 @@ while running:
                 backText = buttonFont.render("BACK", True, LIGHTGRAY)   
                 screen.blit(backText, (585, 722))
 
+            # Displays the differnet attacks of the pokenmon
             if playerPokemon == "charizard":
                 fireBlastText = moveFont.render("FIRE BLAST", True, WHITE)   
                 screen.blit(fireBlastText, (70, 622))
@@ -882,6 +934,8 @@ while running:
                 dragonClawText = moveFont.render("DRAGON CLAW", True, WHITE)   
                 screen.blit(dragonClawText, (45, 722))
 
+                # If player curosr is hovering over a move it will display its 
+                # attacck type and the amount of PP it has/left
                 if 15 <= mouseX <= 450 and 592 <= mouseY <= 692:
                     fireBlastText = moveFont.render("FIRE BLAST", True, LIGHTGRAY)   
                     screen.blit(fireBlastText, (70, 622))
@@ -906,6 +960,7 @@ while running:
                     PPText = attackTypeFont.render("PP:" + str(pokemonStats[playerPokemon]["moves"]["dragonClaw"]["pp"]) + "/" + str(pokemonStats[playerPokemon]["moves"]["dragonClaw"]["maxPP"]), True, 'black')   
                     screen.blit(PPText, (975, 685))
 
+            # Displays the differnet attacks of the pokenmon
             if playerPokemon == "pikachu":
                 thunderboltText = moveFont.render("THUNDERBOLT", True, WHITE)   
                 screen.blit(thunderboltText, (50, 622))
@@ -914,6 +969,8 @@ while running:
                 tackleText = moveFont.render("TACKLE", True, WHITE)   
                 screen.blit(tackleText, (120, 722))
 
+                # If player curosr is hovering over a move it will display its 
+                # attacck type and the amount of PP it has/left
                 if 15 <= mouseX <= 450 and 592 <= mouseY <= 692:
                     thunderboltText = moveFont.render("THUNDERBOLT", True, LIGHTGRAY)   
                     screen.blit(thunderboltText, (50, 622))
@@ -938,6 +995,7 @@ while running:
                     PPText = attackTypeFont.render("PP:" + str(pokemonStats[playerPokemon]["moves"]["tackle"]["pp"]) + "/" + str(pokemonStats[playerPokemon]["moves"]["tackle"]["maxPP"]), True, 'black')   
                     screen.blit(PPText, (975, 685))
 
+            # Displays the differnet attacks of the pokenmon
             if playerPokemon == "gardevoir":
                 psychicText = moveFont.render("PSYCHIC", True, WHITE)   
                 screen.blit(psychicText, (115, 622))
@@ -946,6 +1004,8 @@ while running:
                 tackleText = moveFont.render("TACKLE", True, WHITE)   
                 screen.blit(tackleText, (120, 722))
 
+                # If player curosr is hovering over a move it will display its 
+                # attacck type and the amount of PP it has/left
                 if 15 <= mouseX <= 450 and 592 <= mouseY <= 692:
                     psychicText = moveFont.render("PSYCHIC", True, LIGHTGRAY)   
                     screen.blit(psychicText, (115, 622))
@@ -970,6 +1030,7 @@ while running:
                     PPText = attackTypeFont.render("PP:" + str(pokemonStats[playerPokemon]["moves"]["tackle"]["pp"]) + "/" + str(pokemonStats[playerPokemon]["moves"]["tackle"]["maxPP"]), True, 'black')   
                     screen.blit(PPText, (975, 685))
 
+            # Displays the differnet attacks of the pokenmon
             if playerPokemon == "celebi":
                 psystrikeText = moveFont.render("PSYSTRIKE", True, WHITE)   
                 screen.blit(psystrikeText, (80, 622))
@@ -978,6 +1039,8 @@ while running:
                 tackleText = moveFont.render("TACKLE", True, WHITE)   
                 screen.blit(tackleText, (120, 722))
 
+                # If player curosr is hovering over a move it will display its 
+                # attacck type and the amount of PP it has/left
                 if 15 <= mouseX <= 450 and 592 <= mouseY <= 692:
                     psystrikeText = moveFont.render("PSYSTRIKE", True, LIGHTGRAY)   
                     screen.blit(psystrikeText, (80, 622))
@@ -1002,6 +1065,7 @@ while running:
                     PPText = attackTypeFont.render("PP:" + str(pokemonStats[playerPokemon]["moves"]["tackle"]["pp"]) + "/" + str(pokemonStats[playerPokemon]["moves"]["tackle"]["maxPP"]), True, 'black')   
                     screen.blit(PPText, (975, 685))
 
+            # Displays the differnet attacks of the pokenmon
             if playerPokemon == "lucario":
                 aurasphereText = moveFont.render("AURASPHERE", True, WHITE)   
                 screen.blit(aurasphereText, (70, 622))
@@ -1010,6 +1074,8 @@ while running:
                 tackleText = moveFont.render("TACKLE", True, WHITE)   
                 screen.blit(tackleText, (120, 722))
 
+                # If player curosr is hovering over a move it will display its 
+                # attacck type and the amount of PP it has/left
                 if 15 <= mouseX <= 450 and 592 <= mouseY <= 692:
                     aurasphereText = moveFont.render("AURASPHERE", True, LIGHTGRAY)   
                     screen.blit(aurasphereText, (70, 622))
@@ -1034,18 +1100,21 @@ while running:
                     PPText = attackTypeFont.render("PP:" + str(pokemonStats[playerPokemon]["moves"]["tackle"]["pp"]) + "/" + str(pokemonStats[playerPokemon]["moves"]["tackle"]["maxPP"]), True, 'black')   
                     screen.blit(PPText, (975, 685))
         
+    # If in home menu it will play the menu music
     if gamestate == "homeMenu" and currentMusic != "menu":
         battleMusic.stop()
         mewtwoBattleMusic.stop()
         mainMenuMusic.play(-1)  
         currentMusic = "menu"
     
+     # If in battle menu and the opponent pokemon is Mewtwo it will play the mewtwo music
     if gamestate == "battleMenu" and opponentPokemon == "mewtwo" and currentMusic != "mewtwoBattle":
         battleMusic.stop()
         mainMenuMusic.stop()
         mewtwoBattleMusic.play(-1)
         currentMusic = "mewtwoBattle"
 
+    # If in battle menu and the opponent pokemin is not Mewtwo it will play the battle music
     if gamestate == "battleMenu" and currentMusic != "battle" and opponentPokemon != "mewtwo":
         mainMenuMusic.stop()
         mewtwoBattleMusic.stop()
