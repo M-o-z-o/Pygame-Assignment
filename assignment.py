@@ -299,13 +299,20 @@ while running:
                     playerPokemonFainted = False
                     currentMusic = False
                     
-                        
             if gamestate == "homeMenu":  
                 if 310 <= mouseX <= 915 and 375 <= mouseY <= 460:
                     buttonClickedSound.play()
                     gamestate = "battleMenu"
+                if 310 <= mouseX <= 915 and 505 <= mouseY <= 590:
+                    buttonClickedSound.play()
+                    gamestate = 'howToMenu'
 
-            if gamestate == "battleMenu":
+            elif gamestate == "howToMenu":
+                if 955 <= mouseX <= 1195 and 735 <= mouseY <= 795:
+                    buttonClickedSound.play()
+                    gamestate = "homeMenu"
+
+            elif gamestate == "battleMenu":
                 if 15 <= mouseX <= 450 and 592 <= mouseY <= 692:
                     buttonClickedSound.play()
                     gamestate = "fightMenu"
@@ -619,14 +626,54 @@ while running:
         screen.blit(titleText2, (700, 135))
         pygame.draw.rect(screen, 'black', (305, 370, 615, 95))
         pygame.draw.rect(screen, SKYBLUE, (310, 375, 605, 85))
+        pygame.draw.rect(screen, 'black', (305, 500, 615, 95))
+        pygame.draw.rect(screen, SKYBLUE, (310, 505, 605, 85))
         startText = buttonFont.render("START BATTLE", True, 'black')
         screen.blit(startText, (315, 395))
+        howToText = buttonFont.render("HOW TO PLAY!", True, 'black')
+        screen.blit(howToText, (315, 525))
 
         if mouseX >= 310 and mouseX <= 915 and mouseY >= 375 and mouseY <= 460:
             pygame.draw.rect(screen, 'black', (305, 370, 615, 95))
             pygame.draw.rect(screen, 'lightblue', (310, 375, 605, 85))
             startText = buttonFont.render("START BATTLE", True, 'black')
             screen.blit(startText, (315, 395))
+
+        if mouseX >= 310 and mouseX <= 915 and mouseY >= 505 and mouseY <= 590:
+            pygame.draw.rect(screen, 'black', (305, 500, 615, 95))
+            pygame.draw.rect(screen, 'lightblue', (310, 505, 605, 85))
+            howToText = buttonFont.render("HOW TO PLAY!", True, 'black')
+            screen.blit(howToText, (315, 525))
+
+    if gamestate == "howToMenu":
+        screen.fill('black')
+        screen.blit(mainMenuBg,(0,20))
+        homeMenuText = menuFont.render("HOW TO PLAY", True, "black")   
+        pygame.draw.rect(screen, 'white', (0, 145, 1200, 600))  
+        screen.blit(homeMenuText, (250, 50))
+        titleText = attackTypeFont.render("THIS GAME IS A TURN BASED FIGHTING GAME (INSPIRED BY POKEMON)", True, 'black')   
+        screen.blit(titleText, (45, 175))
+        titleText = attackTypeFont.render("YOU WILL GO AGAINST A TEAM OF 3 POKEMON EACH ONE VARYING IN STATS", True, 'black')   
+        screen.blit(titleText, (45, 275))
+        titleText = attackTypeFont.render("YOU WILL HAVE A TEAM OF POKEMON THAT YOU CAN SWITCH THROUGH", True, 'black')   
+        screen.blit(titleText, (45, 375))
+        titleText = attackTypeFont.render("EACH OF YOUR POKEMON HAS DIFFERENT ATTACKS THEY CAN USE", True, 'black')   
+        screen.blit(titleText, (45, 475))
+        titleText = attackTypeFont.render("YOU CAN ONLY USE EACH ATTACK A CERTAIN AMOUNT OF TIMES", True, 'black')   
+        screen.blit(titleText, (45, 575))
+        titleText = attackTypeFont.render("IF THE POKEMON YOU ARE USING FAINTS, THEN YOU WILL BE FORECD TO CHANGE", True, 'black')   
+        screen.blit(titleText, (45, 675))
+
+        pygame.draw.rect(screen, 'black', (950, 730, 250, 70))
+        pygame.draw.rect(screen, SKYBLUE, (955, 735, 240, 60))
+        backText = pokemonNameFont.render("BACK", True, 'black')
+        screen.blit(backText, (1020, 752))
+
+        if mouseX >= 955 and mouseX <= 1195 and mouseY >= 735 and mouseY <= 795:
+            pygame.draw.rect(screen, 'black', (950, 730, 250, 70))
+            pygame.draw.rect(screen, "lightblue", (955, 735, 240, 60))
+            backText = pokemonNameFont.render("BACK", True, 'black')
+            screen.blit(backText, (1020, 752))
 
     if gamestate == "pokemonMenu":
         playerHP = pokemonStats[playerPokemon]["hp"]
