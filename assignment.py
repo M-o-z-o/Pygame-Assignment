@@ -121,8 +121,9 @@ LIGHTGRAY = (184, 184, 184)
 WHITE = (248, 248, 248)
 SKYBLUE = (74,107,138)
 
-# Dictionaries 
+# Nested dictionaries for player pokenmon 
 pokemonStats = {
+    # Stores image for charizard spirte, postion, HP, moves, PP, and damage
     "charizard": {
         "pokemon": charizard,
         "hp": 150,
@@ -137,6 +138,7 @@ pokemonStats = {
             "slash": {"type": "NORMAL","power": 15,"pp": 10,"maxPP": 10}
         }
     },
+    # Stores image for pikachu spirte, postion, HP, moves, PP, and damage
     "pikachu": {
         "pokemon": pikachu,
         "hp": 100,
@@ -151,6 +153,7 @@ pokemonStats = {
             "tackle": {"type": "NORMAL","power": 15,"pp": 15,"maxPP": 15}
         }
     },
+    # Stores image for gardevoir spirte, postion, HP, moves, PP, and damage
     "gardevoir": {
         "pokemon": gardevoir,
         "hp": 120,
@@ -165,6 +168,7 @@ pokemonStats = {
             "tackle": {"type": "NORMAL","power": 15,"pp": 15,"maxPP": 15}
         }
     },
+    # Stores image for celebi spirte, postion, HP, moves, PP, and damage
     "celebi": {
         "pokemon": celebi,
         "hp": 140,
@@ -179,6 +183,7 @@ pokemonStats = {
             "tackle": {"type": "NORMAL","power": 10,"pp": 15,"maxPP": 15}
         }
     },
+    # Stores image for lucario spirte, postion, HP, moves, PP, and damage
     "lucario": {
         "pokemon": lucario,
         "hp": 130,
@@ -195,7 +200,9 @@ pokemonStats = {
     }
 }
 
+# Nested dictionaries for opponent pokemon
 opponentStats = {   
+    # Stores image for blastoise spirte, postion, HP, moves, PP, and damage
     "blastoise": {
         "pokemon": opponentBlastoise,
         "hp": 160,
@@ -210,6 +217,7 @@ opponentStats = {
             "tackle": {"type": "NORMAL","power": 15,"pp": 15,"maxPP": 15}
         }
     },
+    # Stores image for gengar spirte, postion, HP, moves, PP, and damage
     "gengar": {
         "pokemon": opponentGengar,
         "hp": 140,
@@ -224,6 +232,7 @@ opponentStats = {
             "tackle": {"type": "NORMAL","power": 15,"pp": 15,"maxPP": 15}
         }
     },
+    # Stores image for mewtwo spirte, postion, HP, moves, PP, and damage
     "mewtwo": {
         "pokemon": opponentMewtwo,
         "hp": 180,
@@ -242,10 +251,14 @@ opponentStats = {
 
 # Variables
 gamestate = "homeMenu"
+# list for the player team
 playerTeam = ["pikachu", "gardevoir", "celebi", "lucario", "charizard"]
+# varbiable for index so I able to go through the opponent team
 playerTeamNumber = 0
 playerPokemon = playerTeam[4]
+# list for the opponent team
 opponentTeam = ["blastoise", "gengar", "mewtwo"]
+# varbiable for index so I able to go through the opponent team
 opponentTeamNumber = 0
 opponentPokemon = opponentTeam[opponentTeamNumber]
 turn = "player"
@@ -267,12 +280,16 @@ pygame.init()
 pygame.mixer.init()
 
 # Sounds Effects and Music
+# Main menu theme
 mainMenuMusic = pygame.mixer.Sound(os.path.join(dir,"_Mewtwos Theme_ - Pokmon Suite.mp3"))
 mainMenuMusic.set_volume(0.3)
+# Battle theme against blastoise and gengar
 battleMusic = pygame.mixer.Sound(os.path.join(dir,"Pokmon Sun  Moon - Battle Legend Red  Blue Battle Music HQ.mp3"))
 battleMusic.set_volume(0.3)
+# Mewtwo boss theme
 mewtwoBattleMusic = pygame.mixer.Sound(os.path.join(dir,"Pokmon The Origins Recreation - Mewtwo Battle HQ.mp3"))
 mewtwoBattleMusic.set_volume(0.3)
+# Button sound effect
 buttonClickedSound = pygame.mixer.Sound(os.path.join(dir,"Pokemon A Button - Sound Effect HD.mp3"))
 buttonClickedSound.set_volume(0.5)
 
@@ -321,6 +338,7 @@ while running:
                 if 360 <= mouseX <= 865 and 500 <= mouseY <= 585:
                     buttonClickedSound.play()
                     gamestate = "homeMenu"
+                    # resets every pokemons moves back to max PP
                     for move in pokemonStats["charizard"]["moves"]:
                         pokemonStats["charizard"]["moves"][move]["pp"] = pokemonStats["charizard"]["moves"][move]["maxPP"]
                     for move in pokemonStats["pikachu"]["moves"]:
@@ -338,6 +356,7 @@ while running:
                     for move in opponentStats["mewtwo"]["moves"]:
                         opponentStats["mewtwo"]["moves"][move]["pp"] = opponentStats["mewtwo"]["moves"][move]["maxPP"]
 
+                    # Resets every pokemons HP back to max HP
                     pokemonStats["charizard"]["hp"] = pokemonStats["charizard"]["maxHP"]    
                     pokemonStats["pikachu"]["hp"] = pokemonStats["pikachu"]["maxHP"]
                     pokemonStats["gardevoir"]["hp"] = pokemonStats["gardevoir"]["maxHP"]
@@ -347,6 +366,7 @@ while running:
                     opponentStats["gengar"]["hp"] = opponentStats["gengar"]["maxHP"]
                     opponentStats["mewtwo"]["hp"] = opponentStats["mewtwo"]["maxHP"]
                     
+                    # Resets variables
                     playerTeamNumber = 0
                     playerPokemon = playerTeam[playerTeamNumber]
                     opponentTeamNumber = 0
@@ -358,8 +378,9 @@ while running:
                     playerPokemonFainted = False
                     currentMusic = False
             
-            # Checking for which menu and wether mouse is clicked and if, 
-            # it will play a click sound and change screens
+            # Changing gamestates depending on when/where button is clicked and playing a click sound
+            # If in the home menu the user will have the option to click on the 
+            # how to play button or the start/ battle button.
             if gamestate == "homeMenu":  
                 if 310 <= mouseX <= 915 and 375 <= mouseY <= 460:
                     buttonClickedSound.play()
@@ -368,11 +389,15 @@ while running:
                     buttonClickedSound.play()
                     gamestate = 'howToMenu'
 
+            # If the user wants to exit the how to play menu they will
+            # be able to click on the back button to go back to the home menu
             elif gamestate == "howToMenu":
                 if 955 <= mouseX <= 1195 and 735 <= mouseY <= 795:
                     buttonClickedSound.play()
                     gamestate = "homeMenu"
 
+            # If the user is in the battle menu they will have 4 choices,
+            # either change pokemon, fight, back, or run
             elif gamestate == "battleMenu":
                 if 15 <= mouseX <= 450 and 592 <= mouseY <= 692:
                     buttonClickedSound.play()
@@ -596,6 +621,7 @@ while running:
                 opponentStats[opponentPokemon]["hp"] = 0
         attackPos += 1
     else:
+        # After the animation is done it will start the opponrnet attacking
         attackPos = 0   
         if turn == "opponent":
             opponentIsAttacking = True
@@ -721,13 +747,15 @@ while running:
         screen.blit(startText, (315, 395))
         howToText = buttonFont.render("HOW TO PLAY!", True, 'black')
         screen.blit(howToText, (315, 525))
-
+        
+        # Hover effect for start button
         if mouseX >= 310 and mouseX <= 915 and mouseY >= 375 and mouseY <= 460:
             pygame.draw.rect(screen, 'black', (305, 370, 615, 95))
             pygame.draw.rect(screen, 'lightblue', (310, 375, 605, 85))
             startText = buttonFont.render("START BATTLE", True, 'black')
             screen.blit(startText, (315, 395))
 
+        # Hover effect for how to play button
         if mouseX >= 310 and mouseX <= 915 and mouseY >= 505 and mouseY <= 590:
             pygame.draw.rect(screen, 'black', (305, 500, 615, 95))
             pygame.draw.rect(screen, 'lightblue', (310, 505, 605, 85))
@@ -759,6 +787,7 @@ while running:
         backText = pokemonNameFont.render("BACK", True, 'black')
         screen.blit(backText, (1020, 752))
 
+        # Hover effect for back button
         if mouseX >= 955 and mouseX <= 1195 and mouseY >= 735 and mouseY <= 795:
             pygame.draw.rect(screen, 'black', (950, 730, 250, 70))
             pygame.draw.rect(screen, "lightblue", (955, 735, 240, 60))
@@ -808,22 +837,27 @@ while running:
         backText = whatWillFont.render("BACK", True, WHITE)
         screen.blit(backText, (1100, 450))
 
+        # Mini icon for pikachu in the pokemon menu
         screen.blit(pickachuMini,(-35,100))
         pickachuNameText = whatWillFont.render("PIKACHU", True, "black")   
         screen.blit(pickachuNameText, (135, 230))
 
+        # Mini icon for gardevoir in the pokemon menu
         screen.blit(gardevoirMini,(420,170))
         gardevoirNameText = whatWillFont.render("GARDEVOIR", True, "black")   
         screen.blit(gardevoirNameText, (545, 230))
 
+        # Mini icon for celeb in the pokemon menu
         screen.blit(celebiMini,(-45,255))
         celebiNameText = whatWillFont.render("CELEBI", True, "black")
         screen.blit(celebiNameText, (135, 385))
 
+        # Mini icon for lucario in the pokemon menu
         screen.blit(lucarioMini,(430,325))
         lucarioNameText = whatWillFont.render("LUCARIO", True, "black")
         screen.blit(lucarioNameText, (560, 385))
 
+        # Mini icon for charizard in the pokemon menu
         screen.blit(charizardMini,(855,260))
         charizardNameText = whatWillFont.render("CHARIZARD", True, "black")
         screen.blit(charizardNameText, (970, 315))
@@ -852,6 +886,8 @@ while running:
             pygame.draw.line(screen, RED, (855, 280), (1180, 395), 5)
             pygame.draw.line(screen, RED, (1180, 280), (855, 395), 5)
 
+        # Hover effect for the back button and the buttons for the 
+        # pokemon in the pokemon menu 
         if 1100 <= mouseX <= 1175 and 450 <= mouseY <= 470:
             backText = whatWillFont.render("BACK", True, LIGHTGRAY)
             screen.blit(backText, (1100, 450))
@@ -935,7 +971,7 @@ while running:
                 screen.blit(dragonClawText, (45, 722))
 
                 # If player curosr is hovering over a move it will display its 
-                # attacck type and the amount of PP it has/left
+                # attack type and the amount of PP it has/left
                 if 15 <= mouseX <= 450 and 592 <= mouseY <= 692:
                     fireBlastText = moveFont.render("FIRE BLAST", True, LIGHTGRAY)   
                     screen.blit(fireBlastText, (70, 622))
