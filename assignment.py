@@ -381,13 +381,13 @@ while running:
             # Changing gamestates depending on when/where button is clicked and playing a click sound
             # If in the home menu the user will have the option to click on the 
             # how to play button or the start/ battle button.
-            if gamestate == "homeMenu":  
+            elif gamestate == "homeMenu":  
                 if 310 <= mouseX <= 915 and 375 <= mouseY <= 460:
                     buttonClickedSound.play()
                     gamestate = "battleMenu"
                 if 310 <= mouseX <= 915 and 505 <= mouseY <= 590:
                     buttonClickedSound.play()
-                    gamestate = 'howToMenu'
+                    gamestate = "howToMenu"
 
             # If the user wants to exit the how to play menu they will
             # be able to click on the back button to go back to the home menu
@@ -796,6 +796,10 @@ while running:
 
     # Pokemon menu with the text, buttons, and hover effect of the buttons
     if gamestate == "pokemonMenu":
+        playerHP = pokemonStats[playerPokemon]["hp"]
+        playerMaxHP = pokemonStats[playerPokemon]["maxHP"]
+        opponentHP = opponentStats[opponentPokemon]["hp"]
+        opponentMaxHP = opponentStats[opponentPokemon]["maxHP"]
         drawBattleScreen()
         screen.blit(fightUI,(0,575))
 
@@ -904,6 +908,10 @@ while running:
 
     # Battle menu with the text, buttons, and hover effect of the buttons
     if gamestate == "battleMenu":
+        playerHP = pokemonStats[playerPokemon]["hp"]
+        playerMaxHP = pokemonStats[playerPokemon]["maxHP"]
+        opponentHP = opponentStats[opponentPokemon]["hp"]
+        opponentMaxHP = opponentStats[opponentPokemon]["maxHP"]
         drawBattleScreen()
         # Buttons
         fightText = buttonFont.render("FIGHT", True, WHITE)   
@@ -946,6 +954,10 @@ while running:
 
     # Fight menu with the text, buttons, and hover effect of the buttons
     if gamestate == "fightMenu":
+            playerHP = pokemonStats[playerPokemon]["hp"]
+            playerMaxHP = pokemonStats[playerPokemon]["maxHP"]
+            opponentHP = opponentStats[opponentPokemon]["hp"]
+            opponentMaxHP = opponentStats[opponentPokemon]["maxHP"]
             drawBattleScreen()
             screen.blit(fightUI,(0,575))
             pokemonNameText = pokemonNameFont.render(playerPokemon.upper(), True, 'black')   
